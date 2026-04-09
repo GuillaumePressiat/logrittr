@@ -53,11 +53,8 @@ the tidyverse: first hours of code following a tutorial or learning alone.
 ## Installation
 
 ```r
-# from local source
-devtools::install("path/to/logrittr")
-
-# or once on CRAN/r-universe:
-# install.packages("logrittr")
+# from github
+devtools::install_github("GuillaumePressiat/logrittr")
 ```
 
 ## Usage
