@@ -1,0 +1,6 @@
+url: https://guillaumepressiat.github.io/logrittr/
+
+templates:
+  params:
+    bootswatch: flatly
+
