@@ -1,11 +1,11 @@
-# logrittr <img src="man/figures/lpipe.png" align="right" height="100" alt="" />
+# logrittr <img src="man/figures/logo.png" align="right" height="100" alt="" />
 
 > A logging pipe operator for dplyr and tidyverse data pipelines.
 
 > dplyr's verbs are descriptive: let's make them more verbose!
 
 
-![Example](reference/figures/pastels_example.png)
+![Example](man/figures/pastels_example.png)
 
 In SAS, every DATA step prints a log:
 
