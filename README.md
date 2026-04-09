@@ -116,7 +116,7 @@ logrittr_options(lang = "fr", big_mark = "\u00a0", wrap_width = 52)
 ## Why not `tidylog`?
 
 `tidylog` is a really neat package that gives me motivation for this one.
-`tidylog` works by masking dplyr functions — which can cause subtle conflicts
+`tidylog` works by masking dplyr functions which can cause subtle conflicts
 with other packages. 
 
 `logrittr` uses a custom pipe operator and never touches
