@@ -24,7 +24,7 @@ drop-in pipe that logs row counts, column counts, added/dropped columns, and
 timing at every step, with no function masking.
 
 With [Fira Code](https://github.com/tonsky/FiraCode) ligatures, `%>=%` renders
-as a single wide arrow visually similar to `%>% with an added subline like a subtitle (sub-log).
+as a single wide arrow visually similar to `%>%` with an added subline like a subtitle (sub-log).
 
 
 
