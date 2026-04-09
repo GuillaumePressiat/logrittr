@@ -7,6 +7,9 @@
 
 ![Example](man/figures/pastels_example.png)
 
+## Motivation
+
+
 In SAS, every DATA step prints a log:
 
 ```
@@ -15,14 +18,13 @@ NOTE: 7153 observations were deleted.
 NOTE: The data set WORK.RESULT has 112847 observations and 11 variables.
 ```
 
-## Motivation
 
 R's `dplyr` pipelines are silent. `logrittr` fills that gap with `%>=%`, a
 drop-in pipe that logs row counts, column counts, added/dropped columns, and
 timing at every step, with no function masking.
 
 With [Fira Code](https://github.com/tonsky/FiraCode) ligatures, `%>=%` renders
-as a single wide arrow visually similar to `%>%` with an added subline like a subtitle (sub-log).
+as a single wide arrow visually similar to `%>% with an added subline like a subtitle (sub-log).
 
 
 
