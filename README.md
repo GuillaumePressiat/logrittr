@@ -92,7 +92,7 @@ iris %>=%
 
 ### Screenshot
 
-![Example](reference/figures/iris_example.png)
+![Example](man/figures/iris_example.png)
 
 ## Options
 
