@@ -1,4 +1,4 @@
-# logrittr <img src="man/figures/logo2.png" align="right" height="150" alt="" />
+# logrittr <img src="man/figures/logo2.png" align="right" width="150" alt="" />
 
 > A logging pipe operator for dplyr and tidyverse data pipelines.
 
@@ -40,7 +40,7 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.
 
 #### Pro
 
-Reading this long after execution of a script helps you see:
+Reading this a long time after execution of a script helps you see:
 
 - what happened at which data step without the need of running code again
 - keep trace of important workflows
