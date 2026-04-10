@@ -1,0 +1,193 @@
+---
+title: "Getting started with logrittr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with logrittr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse  = TRUE,
+  comment   = "#>",
+  eval      = FALSE
+)
+```
+
+## Motivation
+
+In SAS, every DATA step prints a log that tells you exactly what happened:
+
+```
+NOTE: There were 120000 observations read from WORK.SALES.
+NOTE: 7153 observations were deleted.
+NOTE: The data set WORK.SALES has 112847 observations and 11 variables.
+```
+
+R's `dplyr` pipelines are silent by default. `logrittr` fills that gap with
+`%>=%`, a pipe operator that logs at each step:
+
+- row count before/after (with signed delta)
+- column count before/after (with signed delta)
+- column names added or dropped
+- elapsed time
+
+No function masking, no dependencies beyond `cli` and `stringr` for coloring and formatting in console.
+
+> **Tip**: Fira Code users: with ligatures enabled, `%>=%` renders as a single
+> wide arrow, close from a regular pipe.
+
+## Installation
+
+```{r install}
+install.packages("logrittr", repos = "https://guillaumepressiat.r-universe.dev")
+
+# alternatively
+# remotes::install_github("GuillaumePressiat/logrittr")
+```
+
+## Basic usage
+
+```{r basic}
+library(logrittr)
+library(dplyr)
+
+iris %>=%
+  as_tibble() %>=%
+  filter(Sepal.Length < 5) %>=%
+  mutate(rn = row_number()) %>=%
+  group_by(Species) %>=%
+  summarise(n = n_distinct(rn))
+```
+
+```
+i as_tibble()                               rows:       150 +0        cols:    5 +0    [   0.0 ms]
+i filter(Sepal.Length < 5)                  rows:        22 -128      cols:    5 +0    [   1.0 ms]
+i mutate(rn = row_number())                 rows:        22 +0        cols:    6 +1    [   0.0 ms]
+  added: rn
+i group_by(Species)                         rows:        22 +0        cols:    6 +0    [   0.0 ms]
+i summarise(n = n_distinct(rn))             rows:         1 -21       cols:    2 -4    [   1.0 ms]
+  dropped: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, rn
+  added: n
+```
+
+`%>=%` is fully composable with `|>` and `%>%`. Use it only where you want
+visibility, and fall back to the native pipe for the rest.
+
+## Nested pipelines
+
+When `%>=%` appears inside an argument (e.g. inside `semi_join()`), the nested
+steps are automatically indented with a `>` prefix so they are visually
+distinct from the main pipeline:
+
+```{r nested}
+iris %>=%
+  as_tibble() %>=%
+  filter(Sepal.Length < 5) %>=%
+  mutate(rn = row_number()) %>=%
+  semi_join(
+    iris %>% as_tibble() %>=%
+      filter(Species == "setosa"),
+    by = "Species"
+  ) %>=%
+  group_by(Species) %>=%
+  summarise(n = n_distinct(rn))
+```
+
+```
+i as_tibble()                                    rows:       150 +0        cols:    5 +0    [   0.0 ms]
+i filter(Sepal.Length < 5)                       rows:        22 -128      cols:    5 +0    [   1.0 ms]
+i mutate(rn = row_number())                      rows:        22 +0        cols:    6 +1    [   0.0 ms]
+  added: rn
+i   > filter(Species == "setosa")                rows:        50 -100      cols:    5 +0    [   0.0 ms]
+i semi_join(iris %>% as_tibble() %>=%            rows:        20 -2        cols:    6 +0    [   5.0 ms]
+  filter(Species == "setosa"), by = "Species")
+i group_by(Species)                              rows:        20 +0        cols:    6 +0    [   0.0 ms]
+i summarise(n = n_distinct(rn))                  rows:         1 -19       cols:    2 -4    [   1.0 ms]
+  dropped: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, rn
+  added: n
+```
+
+## Options
+
+All display options are controlled via `logrittr_options()`:
+
+```{r options}
+logrittr_options()
+#> $wrap_width
+#> [1] 52
+#> $big_mark
+#> [1] " "
+#> $lang
+#> [1] "en"
+#> $max_cols
+#> [1] 5
+```
+
+### Language
+
+Switch to French with `lang = "fr"` (the metrics line uses `lignes`
+instead of `rows`):
+
+```{r lang}
+logrittr_options(lang = "fr")
+
+iris %>=%
+  select(Species, Sepal.Length, Sepal.Width) %>=%
+  filter(Sepal.Length > 5)
+```
+
+```
+i select(Species, Sepal.Length, Sepal.Width)  lignes:       150 +0       cols:    3 -2    [   0.0 ms]
+  dropped: Petal.Length, Petal.Width
+i filter(Sepal.Length > 5)                    lignes:       118 -32      cols:    3 +0    [   0.0 ms]
+```
+
+### Thousands separator
+
+```{r bigmark}
+logrittr_options(lang = "en", big_mark = ",")
+
+big <- data.frame(x = seq_len(1e6), y = rnorm(1e6))
+big %>=% filter(x > 500000)
+```
+
+```
+i filter(x > 500000)          rows:   500,000 -500,000  cols:    2 +0    [  45.0 ms]
+```
+
+### Column name truncation
+
+When a `select` or `join` adds or drops many columns, only the first `max_cols`
+names are shown to keep the log readable:
+
+```{r maxcols}
+logrittr_options(max_cols = 2, lang = "en")
+
+iris %>=%
+  as_tibble() %>=%
+  select(Species, Sepal.Length)
+```
+
+```
+i select(Species, Sepal.Length)             rows:       150 +0        cols:    2 -3    [   0.0 ms]
+  dropped: Sepal.Width, Petal.Length, and 1 other
+```
+
+Use `max_cols = Inf` to always display all names:
+
+```{r maxcols_inf}
+logrittr_options(max_cols = Inf)
+```
+
+### Restoring defaults
+
+`logrittr_options()` invisibly returns the previous values, which makes it easy
+to restore the state after a temporary change:
+
+```{r restore}
+old <- logrittr_options(lang = "fr", big_mark = ",")
+# ... work ...
+do.call(logrittr_options, old)  # restore previous state
+```
