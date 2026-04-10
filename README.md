@@ -1,8 +1,8 @@
-# logrittr <img src="man/figures/logo2.png" align="right" height="150" alt="" />
+# logrittr <img src="man/figures/logo2.png" align="right" width="150" alt="" />
 
 > A logging pipe operator for dplyr and tidyverse data pipelines.
 
-> dplyr's verbs are descriptive: let's make them more verbose!
+> `dplyr` verbs are descriptive: let's make them more verbose!
 
 
 ![Example](man/figures/pastels_example.png)
@@ -40,7 +40,7 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.
 
 #### Pro
 
-Reading this long after execution of a script helps you see:
+Reading this a long time after execution of a script helps you see:
 
 - what happened at which data step without the need of running code again
 - keep trace of important workflows
@@ -119,6 +119,9 @@ logrittr_options(lang = "fr", big_mark = "\u00a0", wrap_width = 52)
 `tidylog` works by masking dplyr functions which can cause subtle conflicts
 with other packages. 
 
+Anyway this also was a moment for me to test a new programmer tool that 
+is used a lot for programming at this time.
+
 `logrittr` uses a custom pipe operator and never touches
 the dplyr namespace.
 
@@ -129,6 +132,6 @@ and is not able to do so with dbplyr pipelines from databases (remote/lazy table
 
 ## Roadmap
 
-- [ ] File sink for production pipelines
-- [ ] `with_logging()` wrapper for `|>` compatibility
-- [ ] `loglevel` option to mute sub-pipeline steps
+- File sink for production pipelines
+- `with_logging()` wrapper for `|>` compatibility
+- `loglevel` option to mute sub-pipeline steps
