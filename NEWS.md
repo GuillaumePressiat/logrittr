@@ -2,7 +2,7 @@
 
 # logrittr 0.1.0
 
-First release.
+First release (proof of concept).
 
 * `%>=%` : logging pipe operator: row counts, column counts, added/dropped
   columns, and step timing at each stage of a dplyr pipeline.
