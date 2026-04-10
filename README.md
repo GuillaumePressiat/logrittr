@@ -59,9 +59,13 @@ the tidyverse: first hours of code following a tutorial or learning alone.
 ## Installation
 
 ```r
-# from github
-devtools::install_github("GuillaumePressiat/logrittr")
+install.packages('logrittr', repos = 'https://guillaumepressiat.r-universe.dev')
+
+# or from github
+# devtools::install_github("GuillaumePressiat/logrittr")
 ```
+
+See https://guillaumepressiat.r-universe.dev/logrittr
 
 ## Usage
 
