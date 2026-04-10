@@ -1,4 +1,4 @@
-# logrittr <img src="man/figures/logo.png" align="right" height="100" alt="" />
+# logrittr <img src="man/figures/logo2.png" align="right" height="150" alt="" />
 
 > A logging pipe operator for dplyr and tidyverse data pipelines.
 
