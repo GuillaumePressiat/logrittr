@@ -6,7 +6,7 @@
 \alias{logrittr-package}
 \title{logrittr: A verbose pipe operator for dplyr pipelines}
 \description{
-logrittr provides the \verb{\%>=\%} operator — a logging pipe inspired by the
+logrittr provides the \verb{\%>=\%} operator: a logging pipe inspired by the
 SAS DATA step log. At each step it reports: row count (before → after),
 column count (before → after), added/dropped column names, and elapsed time.
 
@@ -30,7 +30,7 @@ Nested pipelines are automatically indented. Display is configurable via
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/GuillaumePressiat/logrittr}
+  \item \url{https://guillaumepressiat.github.io/logrittr/}
   \item Report bugs at \url{https://github.com/GuillaumePressiat/logrittr/issues}
 }
 

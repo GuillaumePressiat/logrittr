@@ -1,7 +1,7 @@
 #' logrittr: A verbose pipe operator for dplyr pipelines
 #'
 #' @description
-#' logrittr provides the `%>=%` operator — a logging pipe inspired by the
+#' logrittr provides the `%>=%` operator: a logging pipe inspired by the
 #' SAS DATA step log. At each step it reports: row count (before → after),
 #' column count (before → after), added/dropped column names, and elapsed time.
 #'
