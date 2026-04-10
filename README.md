@@ -5,6 +5,9 @@
 > `dplyr` verbs are descriptive: let's make them more verbose!
 
 
+<br>
+<hr>
+
 ![Example](man/figures/pastels_example.png)
 
 ## Motivation
