@@ -154,6 +154,9 @@ iris  %L>%
   dump_log(stop = TRUE)
 ```
 
+Will write logrittr log content in a csv file.
+
+
 ## Limitations 
 
 - Like `tidylog`, logrittr only works with dplyr pipelines on R data.frames (in memory)
@@ -166,8 +169,6 @@ as join is already done, at this time we only show N row and N col evolution (be
 
 This package at this time is a proof of concept and may not evolve much. It depends of feedbacks.
 
-- File sink for production pipelines (possible with lumberjack, todo: structure log data, pass log 
-as a data.frame to dump a csv or formatted lines passed to cli)
 - Join's cardinalities (get informations from before / after pipe) but it has drawbacks (slow)
 - `with_logging()` wrapper for `|>` compatibility (dream)
 - `loglevel` option to mute sub-pipeline steps

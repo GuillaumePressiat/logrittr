@@ -55,9 +55,9 @@
   }
 }
 
-.log_cols <- function(before_names, after_names) {
+.log_cols <- function(before_names, after_names, verbose = TRUE) {
   dropped <- setdiff(before_names, after_names)
-  if (length(dropped) > 0) {
+  if (length(dropped) > 0 && verbose) {
     cli::cli_bullets(c(" " = paste0(
       cli::col_grey("dropped: "),
       .fmt_col_list(dropped, cli::col_magenta)
@@ -65,10 +65,14 @@
   }
 
   added <- setdiff(after_names, before_names)
-  if (length(added) > 0) {
+  if (length(added) > 0 && verbose) {
     cli::cli_bullets(c(" " = paste0(
       cli::col_grey("added: "),
       .fmt_col_list(added, cli::col_blue)
     )))
   }
+  
+  return(list(dropped = dropped, added = added))
 }
+
+
