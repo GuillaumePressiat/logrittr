@@ -88,15 +88,17 @@ iris %>=%
 ```
 
 ```
-ℹ as_tibble()                                  rows:       150 +0        cols:    5 +0    [   0.0 ms]
-ℹ filter(Sepal.Length < 5)                     rows:        22 -128      cols:    5 +0    [   1.0 ms]
-ℹ mutate(rn = row_number())                    rows:        22 +0        cols:    6 +1    [   0.0 ms]
+── iris  [rows:       150  cols:    5] ─────────────────────────────────────────────────────
+ℹ as_tibble()                            rows:       150 +0        cols:    5 +0    [   0.0 ms]
+ℹ filter(Sepal.Length < 5)               rows:        22 -128      cols:    5 +0    [   3.0 ms]
+ℹ mutate(rn = row_number())              rows:        22 +0        cols:    6 +1    [   1.0 ms]
   added: rn
-ℹ   > filter(Species == "setosa")              rows:        50 -100      cols:    5 +0    [   0.0 ms]
-ℹ semi_join(iris %>% as_tibble() %>=%          rows:        20 -2        cols:    6 +0    [   5.0 ms]
-  filter(Species == "setosa"), by = "Species")
-ℹ group_by(Species)                            rows:        20 +0        cols:    6 +0    [   0.0 ms]
-ℹ summarise(n = n_distinct(rn))                rows:         1 -19       cols:    2 -4    [   1.0 ms]
+ℹ > filter(Species == "setosa")          rows:        50 -100      cols:    5 +0    [   1.0 ms]
+ℹ semi_join(iris %>% as_tibble() %>=%    rows:        20 -2        cols:    6 +0    [   5.0 ms]
+  filter(Species == "setosa"), by =
+  "Species")
+ℹ group_by(Species)                      rows:        20 +0        cols:    6 +0    [   3.0 ms]
+ℹ summarise(n = n_distinct(rn))          rows:         1 -19       cols:    2 -4    [   2.0 ms]
   dropped: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, rn
   added: n
 ```
