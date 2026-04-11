@@ -4,7 +4,7 @@ Version: 0.1.0
 Authors@R: person("Pressiat", "Guillaume", email = "guillaume.pressiat@gmail.com", role = c("aut", "cre"))
 Maintainer: Guillaume Pressiat <guillaume.pressiat@gmail.com>
 Description: Provides the `%>=%` pipe operator that logs row counts, column
-    counts, added/dropped columns, and timing at each step of a dplyr pipeline —
+    counts, added/dropped columns, and timing at each step of a dplyr pipeline,
     inspired by the SAS DATA step log. Supports nested pipelines and configurable
     options for display width, number formatting, and language.
 License: GPL-2 + file LICENSE
