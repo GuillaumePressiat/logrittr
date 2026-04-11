@@ -10,3 +10,4 @@ First release (proof of concept).
   (`"fr"` / `"en"`), and `max_cols`.
 * Nested pipelines automatically detected and displayed with increasing
   indentation via `options(.LPipe_depth)`.
+* Added `logrittr_logger`: an R6 logger for use with the `lumberjack` package.
