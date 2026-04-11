@@ -6,6 +6,12 @@ small_df <- function() data.frame(
   x = 1:10, y = letters[1:10], z = LETTERS[1:10]
 )
 
+reset_opts <- function() {
+  logrittr_options(wrap_width = 32L, big_mark = "\u00a0", lang = "en", max_cols = 5L)
+}
+
+# -- pipe -----------------------------------------------------------------
+
 test_that("%>=% returns correct result", {
   result <- small_df() %>=% subset(x > 5)
   expect_equal(nrow(result), 5L)
@@ -34,17 +40,24 @@ test_that("%>=% resets .LPipe_depth after error", {
   expect_equal(getOption(".LPipe_depth", 0L), 0L)
 })
 
+# -- options --------------------------------------------------------------
+
 test_that("logrittr_options() returns defaults", {
+  reset_opts()
   opts <- logrittr_options()
-  expect_equal(opts$lang, "fr")
-  expect_equal(opts$wrap_width, 52L)
+  expect_equal(opts$lang, "en")
+  expect_equal(opts$wrap_width, 32L)
+  expect_equal(opts$max_cols, 5L)
 })
 
-test_that("logrittr_options() sets and restores", {
-  old <- logrittr_options(lang = "en")
-  expect_equal(logrittr_options()$lang, "en")
-  do.call(logrittr_options, old)  # restore
+test_that("logrittr_options() sets and restores via returned value", {
+  reset_opts()
+  old <- logrittr_options(lang = "fr")
+  on.exit(do.call(logrittr_options, old))
+  
   expect_equal(logrittr_options()$lang, "fr")
+  do.call(logrittr_options, old)
+  expect_equal(logrittr_options()$lang, "en")
 })
 
 test_that("logrittr_options() rejects invalid lang", {
@@ -52,9 +65,10 @@ test_that("logrittr_options() rejects invalid lang", {
 })
 
 test_that(".fmt_col_list truncates beyond max_cols", {
-  logrittr_options(max_cols = 3L)
-  on.exit(logrittr_options(max_cols = 5L))
-
+  old_val <- getOption("logrittr.max_cols")
+  options(logrittr.max_cols = 3L)
+  on.exit(options(logrittr.max_cols = old_val))
+  
   nms    <- c("a", "b", "c", "d", "e")
   result <- logrittr:::.fmt_col_list(nms, identity)
   expect_true(grepl("and 2 others", result))
@@ -62,8 +76,26 @@ test_that(".fmt_col_list truncates beyond max_cols", {
 })
 
 test_that(".fmt_col_list shows all when n <= max_cols", {
-  logrittr_options(max_cols = 5L)
+  reset_opts()
   nms    <- c("a", "b", "c")
   result <- logrittr:::.fmt_col_list(nms, identity)
   expect_false(grepl("other", result))
 })
+
+# -- lumberjack logger ----------------------------------------------------
+
+test_that("logrittr_logger is available when R6 is installed", {
+  skip_if_not_installed("R6")
+  expect_false(is.null(logrittr_logger))
+  expect_true(R6::is.R6Class(logrittr_logger))
+})
+
+test_that("logrittr_logger$add() runs without error", {
+  skip_if_not_installed("R6")
+  logger <- logrittr_logger$new()
+  meta   <- list(expr = quote(filter(x > 1)), src = "filter(x > 1)")
+  input  <- data.frame(x = 1:10)
+  output <- data.frame(x = 5:10)
+  expect_no_error(logger$add(meta, input, output))
+})
+

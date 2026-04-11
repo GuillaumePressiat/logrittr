@@ -38,13 +38,13 @@
 .fmt_col_list <- function(nms, color_fn) {
   max_cols <- .opt("max_cols", 5L)
   n        <- length(nms)
-
+  
   if (n <= max_cols) {
     paste(color_fn(nms), collapse = cli::col_grey(", "))
   } else {
     shown    <- nms[seq_len(max_cols)]
     n_others <- n - max_cols
-    lang     <- .opt("lang", "fr")
+    lang     <- .opt("lang", "en")
     others   <- if (lang == "fr") {
       cli::col_grey(sprintf("et %d autre%s", n_others, if (n_others > 1) "s" else ""))
     } else {
@@ -67,7 +67,7 @@
   added <- setdiff(after_names, before_names)
   if (length(added) > 0) {
     cli::cli_bullets(c(" " = paste0(
-      cli::col_grey("added:   "),
+      cli::col_grey("added: "),
       .fmt_col_list(added, cli::col_blue)
     )))
   }
