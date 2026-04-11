@@ -30,6 +30,7 @@
 #' # Reset to defaults
 #' logrittr_options(wrap_width = 32, big_mark = " ", lang = "en", max_cols = 5)
 #'
+#' @seealso \code{\link{\%>=\%}()}, \link{pipe_log}
 #' @export
 logrittr_options <- function(wrap_width = NULL, big_mark = NULL,
                              lang = NULL, max_cols = NULL) {
