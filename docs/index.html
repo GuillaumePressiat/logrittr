@@ -149,15 +149,17 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <span>  <span class="op">)</span>  <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code>ℹ as_tibble()                                  rows:       150 +0        cols:    5 +0    [   0.0 ms]
-ℹ filter(Sepal.Length &lt; 5)                     rows:        22 -128      cols:    5 +0    [   1.0 ms]
-ℹ mutate(rn = row_number())                    rows:        22 +0        cols:    6 +1    [   0.0 ms]
+<pre><code>── iris  [rows:       150  cols:    5] ─────────────────────────────────────────────────────
+ℹ as_tibble()                            rows:       150 +0        cols:    5 +0    [   0.0 ms]
+ℹ filter(Sepal.Length &lt; 5)               rows:        22 -128      cols:    5 +0    [   3.0 ms]
+ℹ mutate(rn = row_number())              rows:        22 +0        cols:    6 +1    [   1.0 ms]
   added: rn
-ℹ   &gt; filter(Species == "setosa")              rows:        50 -100      cols:    5 +0    [   0.0 ms]
-ℹ semi_join(iris %&gt;% as_tibble() %&gt;=%          rows:        20 -2        cols:    6 +0    [   5.0 ms]
-  filter(Species == "setosa"), by = "Species")
-ℹ group_by(Species)                            rows:        20 +0        cols:    6 +0    [   0.0 ms]
-ℹ summarise(n = n_distinct(rn))                rows:         1 -19       cols:    2 -4    [   1.0 ms]
+ℹ &gt; filter(Species == "setosa")          rows:        50 -100      cols:    5 +0    [   1.0 ms]
+ℹ semi_join(iris %&gt;% as_tibble() %&gt;=%    rows:        20 -2        cols:    6 +0    [   5.0 ms]
+  filter(Species == "setosa"), by =
+  "Species")
+ℹ group_by(Species)                      rows:        20 +0        cols:    6 +0    [   3.0 ms]
+ℹ summarise(n = n_distinct(rn))          rows:         1 -19       cols:    2 -4    [   2.0 ms]
   dropped: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, rn
   added: n</code></pre>
 <div class="section level3">
