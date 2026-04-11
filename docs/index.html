@@ -75,7 +75,7 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="logrittr-">logrittr <img src="reference/figures/logo2.png" align="right" width="150" alt=""><a class="anchor" aria-label="anchor" href="#logrittr-"></a>
+<div class="page-header"><h1 id="logrittr-">logrittr <img src="reference/figures/logo.png" align="right" width="150" alt=""><a class="anchor" aria-label="anchor" href="#logrittr-"></a>
 </h1></div>
 <blockquote>
 <p>A logging pipe operator for dplyr and tidyverse data pipelines.</p>
@@ -138,16 +138,16 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://guillaumepressiat.github.io/logrittr/">logrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">iris</span> <span class="op"><a href="reference/grapes-greater-than-equals-grapes.html">%&gt;=%</a></span></span>
-<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/grapes-greater-than-equals-grapes.html">%&gt;=%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span>  <span class="op"><a href="reference/grapes-greater-than-equals-grapes.html">%&gt;=%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/grapes-greater-than-equals-grapes.html">%&gt;=%</a></span></span>
+<span><span class="va">iris</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span>  <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter-joins.html" class="external-link">semi_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/grapes-greater-than-equals-grapes.html">%&gt;=%</a></span></span>
+<span>    <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
 <span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Species</span> <span class="op">==</span> <span class="st">"setosa"</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="st">"Species"</span></span>
-<span>  <span class="op">)</span>  <span class="op"><a href="reference/grapes-greater-than-equals-grapes.html">%&gt;=%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="reference/grapes-greater-than-equals-grapes.html">%&gt;=%</a></span></span>
+<span>  <span class="op">)</span>  <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>ℹ as_tibble()                                  rows:       150 +0        cols:    5 +0    [   0.0 ms]
 ℹ filter(Sepal.Length &lt; 5)                     rows:        22 -128      cols:    5 +0    [   1.0 ms]
@@ -164,19 +164,31 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <h3 id="screenshot">Screenshot<a class="anchor" aria-label="anchor" href="#screenshot"></a>
 </h3>
 <div class="float">
-<img src="reference/figures/iris_example.png" alt="Example"><div class="figcaption">Example</div>
+<img src="reference/figures/nycflights13_example.png" alt="Example"><div class="figcaption">Example</div>
 </div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://guillaumepressiat.github.io/logrittr/">logrittr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/logrittr_options.html">logrittr_options</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"en"</span>, big_mark <span class="op">=</span> <span class="st">","</span>, wrap_width <span class="op">=</span> <span class="cn">NULL</span>, max_cols <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">nycflights13</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/nycflights13/man/flights.html" class="external-link">flights</a></span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span> </span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">month</span>, <span class="va">day</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span> </span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>values_from <span class="op">=</span> <span class="st">"n"</span>, names_from <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span> <span class="op"><a href="reference/pipe_log.html">%&gt;=%</a></span> </span>
+<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="options">Options<a class="anchor" aria-label="anchor" href="#options"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Switch to English, comma as thousands separator, wider labels</span></span>
-<span><span class="fu"><a href="reference/logrittr_options.html">logrittr_options</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"en"</span>, big_mark <span class="op">=</span> <span class="st">","</span>, wrap_width <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Switch to French, comma as thousands separator, wider labels</span></span>
+<span><span class="fu"><a href="reference/logrittr_options.html">logrittr_options</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"fr"</span>, big_mark <span class="op">=</span> <span class="st">"\u00a0"</span>, wrap_width <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Back to defaults</span></span>
-<span><span class="fu"><a href="reference/logrittr_options.html">logrittr_options</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"fr"</span>, big_mark <span class="op">=</span> <span class="st">"\u00a0"</span>, wrap_width <span class="op">=</span> <span class="fl">52</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># English</span></span>
+<span><span class="fu"><a href="reference/logrittr_options.html">logrittr_options</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"en"</span>, big_mark <span class="op">=</span> <span class="st">","</span>, wrap_width <span class="op">=</span> <span class="fl">52</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr>
 <th>Option</th>
@@ -217,19 +229,31 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 </h2>
 <p>If you already know the <a href="https://github.com/markvanderloo/lumberjack" class="external-link">lumberjack</a> package, compatibility is available with logrittr (timings are approximates).</p>
 <p>Calling <code>logrittr_logger$new()</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/markvanderloo/lumberjack" class="external-link">lumberjack</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">iris</span>  <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va"><a href="reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>stop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Will write logrittr log content in a csv file.</p>
+<span><span class="va">l</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">logfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext<span class="op">=</span><span class="st">"r.log.csv"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">iris</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va">l</span>, label <span class="op">=</span> <span class="st">"iris step"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>file<span class="op">=</span><span class="va">logfile</span>, stop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>   </span>
+<span></span>
+<span><span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va">l</span>, label <span class="op">=</span> <span class="st">"mtcars step"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>file<span class="op">=</span><span class="va">logfile</span>, stop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">logdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">logfile</span><span class="op">)</span></span></code></pre></div>
+<p>Will write logrittr log content of multiple data steps in the same csv file.</p>
 </div>
 <div class="section level2">
 <h2 id="limitations">Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>

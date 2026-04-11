@@ -76,7 +76,15 @@ calls. The first step always shows <code>NA ms</code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="logrittr_options.html">logrittr_options()</a></code>, <code>%&gt;=%</code></p></div>
+    <div class="dont-index"><p><code><a href="logrittr_options.html">logrittr_options()</a></code>, <code>%&gt;=%()</code>, <a href="pipe_log.html">pipe_log</a></p></div>
+    </div>
+    <div id="public-fields">
+    <h2>Public fields</h2>
+    <p></p><div class="r6-fields"><dl><dt><code>label</code></dt>
+<dd><p>Set by lumberjack to the name of the tracked object.</p></dd>
+
+
+</dl><p></p></div>
     </div>
     <div id="methods">
     <h2>Methods</h2>
@@ -92,13 +100,19 @@ calls. The first step always shows <code>NA ms</code>.</p>
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>logrittr_logger</code>.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span>, src_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>verbose</code></dt>
-<dd><p>Logical. Whether to print log messages to the console. Default to TRUE</p></dd>
+<dd><p>Logical. Whether to print log messages to the console.
+Default <code>TRUE</code>.</p></dd>
+
+
+<dt><code>src_name</code></dt>
+<dd><p>Character. Optional name of the source object,
+displayed as a header rule before the first step.</p></dd>
 
 
 </dl><p></p></div>
@@ -130,8 +144,8 @@ calls. The first step always shows <code>NA ms</code>.</p>
 
 </div><p></p><hr><a id="method-logrittr_logger-dump"></a><div class="section">
 <h3 id="method-dump-">Method <code><a href="https://rdrr.io/r/base/dump.html" class="external-link">dump()</a></code><a class="anchor" aria-label="anchor" href="#method-dump-"></a></h3>
-<p>Called by <code><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log()</a></code>. No-op: output is already streamed
-to the console in real time.</p><div class="section">
+<p>Called by <code><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log()</a></code>. Writes accumulated log to a CSV
+file. If <code>verbose = TRUE</code>, also prints the file path.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">logrittr_logger</span><span class="op">$</span><span class="fu">dump</span><span class="op">(</span>file <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
@@ -139,11 +153,12 @@ to the console in real time.</p><div class="section">
 <div class="section">
 <h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>file</code></dt>
-<dd><p>Character. Output file path.</p></dd>
+<dd><p>Character. Output file path. Defaults to <code>"simple.csv"</code> or
+<code>"&lt;label&gt;_simple.csv"</code> when a label is set.</p></dd>
 
 
 <dt><code>...</code></dt>
-<dd><p>Additional arguments passed to write.csv()</p></dd>
+<dd><p>Additional arguments passed to <code><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv()</a></code>.</p></dd>
 
 
 </dl><p></p></div>
@@ -188,7 +203,7 @@ to the console in real time.</p><div class="section">
 <span class="r-in"><span><span class="va">logfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext<span class="op">=</span><span class="st">"r.log.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">iris</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va">logrittr_logger</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va">logrittr_logger</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span>, label <span class="op">=</span> <span class="st">"A reel simple example on iris df"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
