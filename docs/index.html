@@ -229,6 +229,7 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>stop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>Will write logrittr log content in a csv file.</p>
 </div>
 <div class="section level2">
 <h2 id="limitations">Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
@@ -243,7 +244,6 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 </h2>
 <p>This package at this time is a proof of concept and may not evolve much. It depends of feedbacks.</p>
 <ul>
-<li>File sink for production pipelines (possible with lumberjack, todo: structure log data, pass log as a data.frame to dump a csv or formatted lines passed to cli)</li>
 <li>Join’s cardinalities (get informations from before / after pipe) but it has drawbacks (slow)</li>
 <li>
 <code>with_logging()</code> wrapper for <code>|&gt;</code> compatibility (dream)</li>

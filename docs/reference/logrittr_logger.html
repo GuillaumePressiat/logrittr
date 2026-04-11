@@ -92,9 +92,17 @@ calls. The first step always shows <code>NA ms</code>.</p>
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
 <p>Create a new <code>logrittr_logger</code>.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
+<div class="section">
+<h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>verbose</code></dt>
+<dd><p>Logical. Whether to print log messages to the console. Default to TRUE</p></dd>
+
+
+</dl><p></p></div>
+</div>
 
 </div><p></p><hr><a id="method-logrittr_logger-add"></a><div class="section">
 <h3 id="method-add-">Method <code>add()</code><a class="anchor" aria-label="anchor" href="#method-add-"></a></h3>
@@ -104,7 +112,7 @@ calls. The first step always shows <code>NA ms</code>.</p>
 </div>
 
 <div class="section">
-<h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
+<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>meta</code></dt>
 <dd><p>List with elements <code>expr</code> and <code>src</code> (the step expression).</p></dd>
 
@@ -125,13 +133,17 @@ calls. The first step always shows <code>NA ms</code>.</p>
 <p>Called by <code><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log()</a></code>. No-op: output is already streamed
 to the console in real time.</p><div class="section">
 <h4 id="usage-2">Usage<a class="anchor" aria-label="anchor" href="#usage-2"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">logrittr_logger</span><span class="op">$</span><span class="fu">dump</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">logrittr_logger</span><span class="op">$</span><span class="fu">dump</span><span class="op">(</span>file <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
-<h4 id="arguments-1">Arguments<a class="anchor" aria-label="anchor" href="#arguments-1"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>...</code></dt>
-<dd><p>Ignored.</p></dd>
+<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>file</code></dt>
+<dd><p>Character. Output file path.</p></dd>
+
+
+<dt><code>...</code></dt>
+<dd><p>Additional arguments passed to write.csv()</p></dd>
 
 
 </dl><p></p></div>
@@ -145,7 +157,7 @@ to the console in real time.</p><div class="section">
 </div>
 
 <div class="section">
-<h4 id="arguments-2">Arguments<a class="anchor" aria-label="anchor" href="#arguments-2"></a></h4>
+<h4 id="arguments-3">Arguments<a class="anchor" aria-label="anchor" href="#arguments-3"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 
@@ -173,20 +185,21 @@ to the console in real time.</p><div class="section">
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>stop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span>  </span></span>
-<span class="r-in"><span><span class="co"># logfile &lt;- tempfile(fileext=".r.log.txt")</span></span></span>
-<span class="r-in"><span><span class="co"># </span></span></span>
-<span class="r-in"><span><span class="co">#  iris %L&gt;%</span></span></span>
-<span class="r-in"><span><span class="co">#   start_log(log = logrittr_logger$new()) %L&gt;%</span></span></span>
-<span class="r-in"><span><span class="co">#   as_tibble()  %L&gt;%</span></span></span>
-<span class="r-in"><span><span class="co">#   filter(Sepal.Length &lt; 5) %L&gt;%</span></span></span>
-<span class="r-in"><span><span class="co">#   mutate(rn = row_number()) %L&gt;%</span></span></span>
-<span class="r-in"><span><span class="co">#   group_by(Species) %L&gt;%</span></span></span>
-<span class="r-in"><span><span class="co">#   summarise(n = n_distinct(rn)) %L&gt;%</span></span></span>
-<span class="r-in"><span><span class="co">#   dump_log(file=logfile)</span></span></span>
-<span class="r-in"><span><span class="co">#   </span></span></span>
-<span class="r-in"><span><span class="co">#   logdata &lt;- read.lines(logfile)</span></span></span>
-<span class="r-in"><span><span class="co">#   </span></span></span>
-<span class="r-in"><span><span class="co">#   head(logdata)</span></span></span>
+<span class="r-in"><span><span class="va">logfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext<span class="op">=</span><span class="st">"r.log.csv"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">iris</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va">logrittr_logger</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>file<span class="op">=</span><span class="va">logfile</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">logdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">logfile</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">logdata</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
