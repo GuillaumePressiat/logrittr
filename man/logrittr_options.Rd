@@ -24,7 +24,7 @@ to disable.}
 
 \item{max_cols}{Integer. Maximum number of column names to display in the
 \code{added}/\code{dropped} lines. If there are more, the first \code{max_cols} are
-shown followed by \code{"and N others"}. Default: \code{7}. Use \code{Inf} to always
+shown followed by \code{"and N others"}. Default: \code{5}. Use \code{Inf} to always
 show all columns.}
 }
 \value{
