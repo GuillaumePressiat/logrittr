@@ -13,7 +13,7 @@
 #'   `"en"` (default) or `"fr"`.
 #' @param max_cols Integer. Maximum number of column names to display in the
 #'   `added`/`dropped` lines. If there are more, the first `max_cols` are
-#'   shown followed by `"and N others"`. Default: `7`. Use `Inf` to always
+#'   shown followed by `"and N others"`. Default: `5`. Use `Inf` to always
 #'   show all columns.
 #'
 #' @return Invisibly returns the previous values of any option that was changed,
@@ -32,14 +32,14 @@
 #'
 #' @export
 logrittr_options <- function(wrap_width = NULL, big_mark = NULL,
-                              lang = NULL, max_cols = NULL) {
+                             lang = NULL, max_cols = NULL) {
   defaults <- list(
     logrittr.wrap_width = 32L,
     logrittr.big_mark   = "\u00a0",
     logrittr.lang       = "en",
-    logrittr.max_cols   = 7L
+    logrittr.max_cols   = 5L
   )
-
+  
   if (is.null(wrap_width) && is.null(big_mark) && is.null(lang) && is.null(max_cols)) {
     current <- lapply(names(defaults), getOption)
     names(current) <- sub("logrittr\\.", "", names(defaults))
@@ -47,22 +47,22 @@ logrittr_options <- function(wrap_width = NULL, big_mark = NULL,
                    current, defaults)
     return(current)
   }
-
+  
   if (!is.null(lang) && !lang %in% c("fr", "en")) {
     stop("`lang` must be one of \"fr\" or \"en\".", call. = FALSE)
   }
   if (!is.null(max_cols) && !is.numeric(max_cols) || isTRUE(max_cols < 1L)) {
     stop("`max_cols` must be a positive number or Inf.", call. = FALSE)
   }
-
+  
   new_opts <- list()
   if (!is.null(wrap_width)) new_opts$logrittr.wrap_width <- as.integer(wrap_width)
   if (!is.null(big_mark))   new_opts$logrittr.big_mark   <- big_mark
   if (!is.null(lang))       new_opts$logrittr.lang       <- lang
   if (!is.null(max_cols))   new_opts$logrittr.max_cols   <- max_cols
-
+  
   old <- lapply(names(new_opts), getOption)
-  names(old) <- names(new_opts)
+  names(old) <- sub("logrittr\\.", "", names(new_opts))  # strip prefix so do.call works
   do.call(options, new_opts)
   invisible(old)
 }
