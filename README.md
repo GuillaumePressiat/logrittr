@@ -1,4 +1,4 @@
-# logrittr <img src="man/figures/logo2.png" align="right" width="150" alt="" />
+# logrittr <img src="man/figures/logo.png" align="right" width="150" alt="" />
 
 > A logging pipe operator for dplyr and tidyverse data pipelines.
 
@@ -102,16 +102,32 @@ iris %>=%
 
 ### Screenshot
 
-![Example](man/figures/iris_example.png)
+![Example](man/figures/nycflights13_example.png)
+
+
+```r
+library(dplyr)
+library(logrittr)
+
+logrittr_options(lang = "en", big_mark = ",", wrap_width = NULL, max_cols = 3)
+
+nycflights13::flights %>=% 
+  as_tibble() %>=%
+  group_by(year, month, day) %>=% 
+  count() %>=% 
+  tidyr::pivot_wider(values_from = "n", names_from = "day") %>=% 
+  glimpse()
+
+```
 
 ## Options
 
 ```r
-# Switch to English, comma as thousands separator, wider labels
-logrittr_options(lang = "en", big_mark = ",", wrap_width = 60)
+# Switch to French, comma as thousands separator, wider labels
+logrittr_options(lang = "fr", big_mark = "\u00a0", wrap_width = 60)
 
-# Back to defaults
-logrittr_options(lang = "fr", big_mark = "\u00a0", wrap_width = 52)
+# English
+logrittr_options(lang = "en", big_mark = ",", wrap_width = 52)
 ```
 
 | Option | Default | Description |
@@ -144,17 +160,29 @@ Calling `logrittr_logger$new()`:
 library(lumberjack)
 library(dplyr)
 
-iris  %L>%
-  start_log(log = logrittr_logger$new()) %L>%
-  as_tibble() %L>%
-  filter(Sepal.Length < 5) %L>%
-  mutate(rn = row_number()) %L>%
-  group_by(Species) %L>%
-  summarise(n = n_distinct(rn)) %L>%
-  dump_log(stop = TRUE)
+l <- logrittr_logger$new(verbose = TRUE)
+logfile <- tempfile(fileext="r.log.csv")
+
+iris %L>%
+   start_log(log = l, label = "iris step") %L>%
+   as_tibble() %L>%
+   filter(Sepal.Length < 5) %L>%
+   mutate(rn = row_number()) %L>%
+   group_by(Species) %L>%
+   summarise(n = n_distinct(rn)) %L>%
+   dump_log(file=logfile, stop = FALSE)
+   
+
+mtcars %>% 
+  start_log(log = l, label = "mtcars step") %L>%
+   count() %L>%
+   dump_log(file=logfile, stop = TRUE)
+
+
+logdata <- read.csv(logfile)
 ```
 
-Will write logrittr log content in a csv file.
+Will write logrittr log content of multiple data steps in the same csv file.
 
 
 ## Limitations 
