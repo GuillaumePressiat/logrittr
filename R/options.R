@@ -28,7 +28,7 @@
 #' logrittr_options(lang = "en", big_mark = ",", max_cols = 3)
 #'
 #' # Reset to defaults
-#' logrittr_options(wrap_width = 52, big_mark = " ", lang = "fr", max_cols = 5)
+#' logrittr_options(wrap_width = 32, big_mark = " ", lang = "en", max_cols = 5)
 #'
 #' @export
 logrittr_options <- function(wrap_width = NULL, big_mark = NULL,
@@ -81,7 +81,7 @@ logrittr_options <- function(wrap_width = NULL, big_mark = NULL,
 )
 
 .get_labels <- function() {
-  lang <- .opt("lang", "fr")
+  lang <- .opt("lang", "en")
   if (!lang %in% names(.labels)) lang <- "en"
   .labels[[lang]]
 }

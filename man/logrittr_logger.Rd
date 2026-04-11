@@ -34,20 +34,21 @@ iris \%L>\%
   dump_log(stop = TRUE)
   
   
-# logfile <- tempfile(fileext=".r.log.txt")
-# 
-#  iris \%L>\%
-#   start_log(log = logrittr_logger$new()) \%L>\%
-#   as_tibble()  \%L>\%
-#   filter(Sepal.Length < 5) \%L>\%
-#   mutate(rn = row_number()) \%L>\%
-#   group_by(Species) \%L>\%
-#   summarise(n = n_distinct(rn)) \%L>\%
-#   dump_log(file=logfile)
-#   
-#   logdata <- read.lines(logfile)
-#   
-#   head(logdata)
+logfile <- tempfile(fileext="r.log.csv")
+
+iris \%L>\%
+  start_log(log = logrittr_logger$new(verbose = FALSE)) \%L>\%
+  as_tibble()  \%L>\%
+  filter(Sepal.Length < 5) \%L>\%
+  mutate(rn = row_number()) \%L>\%
+  group_by(Species) \%L>\%
+  summarise(n = n_distinct(rn)) \%L>\%
+  dump_log(file=logfile)
+
+logdata <- read.csv(logfile)
+
+head(logdata)
+
   
 }
 
@@ -70,9 +71,16 @@ iris \%L>\%
 \subsection{Method \code{new()}}{
 Create a new \code{logrittr_logger}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{logrittr_logger$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{logrittr_logger$new(verbose = TRUE)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{verbose}}{Logical. Whether to print log messages to the console. Default to TRUE}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-logrittr_logger-add"></a>}}
@@ -102,13 +110,15 @@ Called by lumberjack after each pipe step.
 Called by \code{dump_log()}. No-op: output is already streamed
 to the console in real time.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{logrittr_logger$dump(...)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{logrittr_logger$dump(file = NULL, ...)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{Ignored.}
+\item{\code{file}}{Character. Output file path.}
+
+\item{\code{...}}{Additional arguments passed to write.csv()}
 }
 \if{html}{\out{</div>}}
 }

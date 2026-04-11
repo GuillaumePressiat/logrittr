@@ -44,6 +44,6 @@ logrittr_options()
 logrittr_options(lang = "en", big_mark = ",", max_cols = 3)
 
 # Reset to defaults
-logrittr_options(wrap_width = 52, big_mark = " ", lang = "fr", max_cols = 5)
+logrittr_options(wrap_width = 32, big_mark = " ", lang = "en", max_cols = 5)
 
 }

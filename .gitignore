@@ -2,6 +2,9 @@
 .Rhistory
 .Rapp.history
 
+# lumberjack csv for tests
+*.csv
+
 # Session Data files
 .RData
 .RDataTmp

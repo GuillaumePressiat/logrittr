@@ -29,20 +29,21 @@
 #'   dump_log(stop = TRUE)
 #'   
 #'   
-#' # logfile <- tempfile(fileext=".r.log.txt")
-#' # 
-#' #  iris %L>%
-#' #   start_log(log = logrittr_logger$new()) %L>%
-#' #   as_tibble()  %L>%
-#' #   filter(Sepal.Length < 5) %L>%
-#' #   mutate(rn = row_number()) %L>%
-#' #   group_by(Species) %L>%
-#' #   summarise(n = n_distinct(rn)) %L>%
-#' #   dump_log(file=logfile)
-#' #   
-#' #   logdata <- read.lines(logfile)
-#' #   
-#' #   head(logdata)
+#' logfile <- tempfile(fileext="r.log.csv")
+#' 
+#' iris %L>%
+#'   start_log(log = logrittr_logger$new(verbose = FALSE)) %L>%
+#'   as_tibble()  %L>%
+#'   filter(Sepal.Length < 5) %L>%
+#'   mutate(rn = row_number()) %L>%
+#'   group_by(Species) %L>%
+#'   summarise(n = n_distinct(rn)) %L>%
+#'   dump_log(file=logfile)
+#' 
+#' logdata <- read.csv(logfile)
+#' 
+#' head(logdata)
+#' 
 #'   
 #' }
 #'
@@ -52,12 +53,21 @@ logrittr_logger <- if (requireNamespace("R6", quietly = TRUE) &&
                        requireNamespace("lumberjack", quietly = TRUE)) {
   
   R6::R6Class("logrittr_logger",
-              
+              private = list(
+                n = NULL
+                , t0 = NULL
+                , store = NULL
+                , verbose = NULL
+              ),
               public = list(
                 
                 #' @description Create a new `logrittr_logger`.
-                initialize = function() {
+                #' @param verbose Logical. Whether to print log messages to the console. Default to TRUE
+                initialize = function(verbose = TRUE) {
+                  private$n <- 0
                   private$t0 <- NULL
+                  private$store <- new.env()
+                  private$verbose <- verbose
                 },
                 
                 #' @description Called by lumberjack after each pipe step.
@@ -71,7 +81,9 @@ logrittr_logger <- if (requireNamespace("R6", quietly = TRUE) &&
                   } else {
                     NA_real_
                   }
+                  private$n <- private$n + 1
                   private$t0 <- now
+                  logname <- sprintf("step%03d",private$n)
                   
                   step_name  <- meta$src
                   before_r   <- if (is.data.frame(input))  nrow(input)   else NA
@@ -88,17 +100,50 @@ logrittr_logger <- if (requireNamespace("R6", quietly = TRUE) &&
                     elapsed
                   )
                   
-                  .log_step(step_name, depth = 0L, metrics)
-                  .log_cols(before_nms, after_nms)
+                  if (private$verbose){
+                    .log_step(step_name, depth = 0L, metrics)
+                    .log_cols(before_nms, after_nms, private$verbose)
+                  }
+                  
+                  ce <- .log_cols(before_nms, after_nms, FALSE)
+                  ce_out <- character(0L)
+                  if (length(ce$dropped) > 0){
+                    ce_out <- paste0('droppped : ', paste0(ce$dropped, collapse = ", "), "; ")
+                  }
+                  if (length(ce$added) > 0){
+                    ce_out <- paste0(ce_out, 'added : ', paste0(ce$added, collapse = ", "))
+                  }
+                  if (length(ce_out) == 0L){
+                    ce_out <- ""
+                  }
+                  logdat <- data.frame(step                        = private$n
+                                      , time                       = Sys.time()
+                                      # , expression                 = meta$src
+                                      , changed                    = !identical(input, output)
+                                      , log_step                   = step_name
+                                      , frame_evolution            = cli::ansi_strip(metrics)
+                                      , column_evolution          = ce_out
+                                      , stringsAsFactors = FALSE) 
+                  private$store[[logname]] <- logdat
                 },
                 
                 #' @description Called by `dump_log()`. No-op: output is already streamed
                 #' to the console in real time.
-                #' @param ... Ignored.
-                dump = function(...) invisible(NULL)
-              ),
-              
-              private = list(t0 = NULL)
+                #' @param file Character. Output file path.
+                #' @param ... Additional arguments passed to write.csv()
+                # dump = function(...) invisible(NULL)
+                dump = function(file=NULL,...){
+                  log_df <- do.call(rbind,mget(ls(private$store), private$store))
+                  if (is.null(file)){ 
+                    file <- "simple.csv"
+                    if (!is.null(self$label) && self$label != "" ) file <- paste(self$label,file,sep="_")
+                  }
+                  write.csv(log_df, file=file, row.names = FALSE,...)
+                  if (is.character(file) && private$verbose){
+                    cli::cli_alert_info(sprintf("Dumped a log at %s", normalizePath(file)))
+                  }
+                }
+              )
   )
   
 } else {
