@@ -243,6 +243,38 @@ change:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">logrittr_options</span>, <span class="va">old</span><span class="op">)</span>  <span class="co"># restore previous state</span></span></code></pre></div>
 </div>
 </div>
+<div class="section level2">
+<h2 id="using-logrittr-with-lumberjack">Using logrittr with lumberjack<a class="anchor" aria-label="anchor" href="#using-logrittr-with-lumberjack"></a>
+</h2>
+<p>If you already use the <code>lumberjack</code> package,
+<code>logrittr_logger</code> plugs directly into its
+<code>%L&gt;%</code> pipe. The same console output as
+<code>%&gt;=%</code> is produced, and you keep access to all lumberjack
+features (<code><a href="https://rdrr.io/pkg/lumberjack/man/run_file.html" class="external-link">run_file()</a></code>, custom loggers, etc.).</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/markvanderloo/lumberjack" class="external-link">lumberjack</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">iris</span>                                     <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va"><a href="../reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span>                            <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span>               <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>              <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span>                      <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span>          <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>stop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code>i as_tibble()                                   rows:       150 +0        cols:    5 +0    [  NA ms]
+i filter(Sepal.Length &lt; 5)                      rows:        22 -128      cols:    5 +0    [   1.0 ms]
+i mutate(rn = row_number())                     rows:        22 +0        cols:    6 +1    [   0.0 ms]
+  added: rn
+i group_by(Species)                             rows:        22 +0        cols:    6 +0    [   0.0 ms]
+i summarise(n = n_distinct(rn))                 rows:         1 -21       cols:    2 -4    [   1.0 ms]
+  dropped: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, rn
+  added: n</code></pre>
+<p>The first step always shows <code>NA ms</code> because lumberjack
+does not provide a start time – elapsed is measured as the interval
+between consecutive steps.</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

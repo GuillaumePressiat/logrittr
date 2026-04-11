@@ -83,6 +83,7 @@
 <blockquote>
 <p><code>dplyr</code> verbs are descriptive: let’s make them more verbose!</p>
 </blockquote>
+<br><hr>
 <div class="float">
 <img src="reference/figures/pastels_example.png" alt="Example"><div class="figcaption">Example</div>
 </div>
@@ -124,8 +125,11 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># from github</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"GuillaumePressiat/logrittr"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'logrittr'</span>, repos <span class="op">=</span> <span class="st">'https://guillaumepressiat.r-universe.dev'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># or from github</span></span>
+<span><span class="co"># devtools::install_github("GuillaumePressiat/logrittr")</span></span></code></pre></div>
+<p>See <a href="https://guillaumepressiat.r-universe.dev/logrittr" class="external-link uri">https://guillaumepressiat.r-universe.dev/logrittr</a></p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -203,22 +207,46 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <div class="section level2">
 <h2 id="why-not-tidylog">Why not <code>tidylog</code>?<a class="anchor" aria-label="anchor" href="#why-not-tidylog"></a>
 </h2>
-<p><code>tidylog</code> is a really neat package that gives me motivation for this one. <code>tidylog</code> works by masking dplyr functions which can cause subtle conflicts with other packages.</p>
+<p><a href="">tidylog</a> is a really neat package that gives me motivation for this one. <code>tidylog</code> works by masking dplyr functions which can cause subtle conflicts with other packages.</p>
 <p>Anyway this also was a moment for me to test a new programmer tool that is used a lot for programming at this time.</p>
-<p><code>logrittr</code> uses a custom pipe operator and never touches the dplyr namespace.</p>
+<p><code>logrittr</code> uses a custom pipe operator and never touches the dplyr namespace. Its console output is colorful and informative thanks to the cli package.</p>
+</div>
+<div class="section level2">
+<h2 id="working-with-lumberjack">Working with <code>lumberjack</code>
+<a class="anchor" aria-label="anchor" href="#working-with-lumberjack"></a>
+</h2>
+<p>If you already know the <a href="https://github.com/markvanderloo/lumberjack" class="external-link">lumberjack</a> package, compatibility is available with logrittr (timings are approximates).</p>
+<p>Calling <code>logrittr_logger$new()</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/markvanderloo/lumberjack" class="external-link">lumberjack</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">iris</span>  <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/start_log.html" class="external-link">start_log</a></span><span class="op">(</span>log <span class="op">=</span> <span class="va"><a href="reference/logrittr_logger.html">logrittr_logger</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>rn <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html" class="external-link">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/n_distinct.html" class="external-link">n_distinct</a></span><span class="op">(</span><span class="va">rn</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/lumberjack/man/grapes-greater-than-greater-than-grapes.html" class="external-link">%L&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/lumberjack/man/dump_log.html" class="external-link">dump_log</a></span><span class="op">(</span>stop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="limitations">Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
 </h2>
-<p>Like <code>tidylog</code>, logrittr only works with dplyr pipelines on R data.frames (in memory) and is not able to do so with dbplyr pipelines from databases (remote/lazy table).</p>
+<ul>
+<li><p>Like <code>tidylog</code>, logrittr only works with dplyr pipelines on R data.frames (in memory) and is not able to do so with dbplyr pipelines from databases (remote/lazy table).</p></li>
+<li><p>Join cardinalities nicely done in tidylog are difficult to have from the pipe as join is already done, at this time we only show N row and N col evolution (before / after).</p></li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
 </h2>
+<p>This package at this time is a proof of concept and may not evolve much. It depends of feedbacks.</p>
 <ul>
-<li>File sink for production pipelines</li>
+<li>File sink for production pipelines (possible with lumberjack, todo: structure log data, pass log as a data.frame to dump a csv or formatted lines passed to cli)</li>
+<li>Join’s cardinalities (get informations from before / after pipe) but it has drawbacks (slow)</li>
 <li>
-<code>with_logging()</code> wrapper for <code>|&gt;</code> compatibility</li>
+<code>with_logging()</code> wrapper for <code>|&gt;</code> compatibility (dream)</li>
 <li>
 <code>loglevel</code> option to mute sub-pipeline steps</li>
 </ul>
