@@ -32,7 +32,7 @@
 #' logfile <- tempfile(fileext="r.log.csv")
 #' 
 #' iris %L>%
-#'   start_log(log = logrittr_logger$new(verbose = FALSE)) %L>%
+#'   start_log(log = logrittr_logger$new(verbose = FALSE, label = "A reel simple example on iris df")) %L>%
 #'   as_tibble()  %L>%
 #'   filter(Sepal.Length < 5) %L>%
 #'   mutate(rn = row_number()) %L>%
@@ -47,27 +47,36 @@
 #'   
 #' }
 #'
-#' @seealso [logrittr_options()], `%>=%`
+#' @seealso [logrittr_options()], \code{\link{\%>=\%}()}, \link{pipe_log}
 #' @export
-logrittr_logger <- if (requireNamespace("R6", quietly = TRUE) &&
+logrittr_logger <- if (requireNamespace("R6",         quietly = TRUE) &&
                        requireNamespace("lumberjack", quietly = TRUE)) {
   
   R6::R6Class("logrittr_logger",
+              
               private = list(
-                n = NULL
-                , t0 = NULL
-                , store = NULL
-                , verbose = NULL
+                n        = NULL,
+                t0       = NULL,
+                store    = NULL,
+                verbose  = NULL,
+                src_name = NULL
               ),
+              
               public = list(
+                #' @field label Set by lumberjack to the name of the tracked object.
+                label = NULL,
                 
                 #' @description Create a new `logrittr_logger`.
-                #' @param verbose Logical. Whether to print log messages to the console. Default to TRUE
-                initialize = function(verbose = TRUE) {
-                  private$n <- 0
-                  private$t0 <- NULL
-                  private$store <- new.env()
-                  private$verbose <- verbose
+                #' @param verbose Logical. Whether to print log messages to the console.
+                #'   Default `TRUE`.
+                #' @param src_name Character. Optional name of the source object,
+                #'   displayed as a header rule before the first step.
+                initialize = function(verbose = TRUE, src_name = NULL) {
+                  private$n        <- 0L
+                  private$t0       <- NULL
+                  private$store    <- new.env(parent = emptyenv())
+                  private$verbose  <- verbose
+                  private$src_name <- src_name
                 },
                 
                 #' @description Called by lumberjack after each pipe step.
@@ -81,9 +90,22 @@ logrittr_logger <- if (requireNamespace("R6", quietly = TRUE) &&
                   } else {
                     NA_real_
                   }
-                  private$n <- private$n + 1
                   private$t0 <- now
-                  logname <- sprintf("step%03d",private$n)
+                  private$n  <- private$n + 1L
+                  
+                  # Resolve source name: explicit src_name > lumberjack label > ""
+                  src <- if (!is.null(private$src_name) && nchar(private$src_name) > 0) {
+                    private$src_name
+                  } else if (!is.null(self$label) && nchar(self$label) > 0) {
+                    self$label
+                  } else {
+                    ""
+                  }
+                  
+                  # Header on first step
+                  if (private$n == 1L && nchar(src) > 0 && is.data.frame(input)) {
+                    .log_header(src, nrow(input), ncol(input))
+                  }
                   
                   step_name  <- meta$src
                   before_r   <- if (is.data.frame(input))  nrow(input)   else NA
@@ -100,48 +122,47 @@ logrittr_logger <- if (requireNamespace("R6", quietly = TRUE) &&
                     elapsed
                   )
                   
-                  if (private$verbose){
+                  if (private$verbose) {
                     .log_step(step_name, depth = 0L, metrics)
-                    .log_cols(before_nms, after_nms, private$verbose)
                   }
+                  ce <- .log_cols(before_nms, after_nms, verbose = private$verbose)
                   
-                  ce <- .log_cols(before_nms, after_nms, FALSE)
-                  ce_out <- character(0L)
-                  if (length(ce$dropped) > 0){
-                    ce_out <- paste0('droppped : ', paste0(ce$dropped, collapse = ", "), "; ")
-                  }
-                  if (length(ce$added) > 0){
-                    ce_out <- paste0(ce_out, 'added : ', paste0(ce$added, collapse = ", "))
-                  }
-                  if (length(ce_out) == 0L){
-                    ce_out <- ""
-                  }
-                  logdat <- data.frame(step                        = private$n
-                                      , time                       = Sys.time()
-                                      # , expression                 = meta$src
-                                      , changed                    = !identical(input, output)
-                                      , log_step                   = step_name
-                                      , frame_evolution            = cli::ansi_strip(metrics)
-                                      , column_evolution          = ce_out
-                                      , stringsAsFactors = FALSE) 
-                  private$store[[logname]] <- logdat
+                  # Build CSV row
+                  ce_out <- ""
+                  if (length(ce$dropped) > 0)
+                    ce_out <- paste0("dropped: ", paste(ce$dropped, collapse = ", "))
+                  if (length(ce$added) > 0)
+                    ce_out <- paste0(ce_out,
+                                     if (nchar(ce_out) > 0) "; " else "",
+                                     "added: ", paste(ce$added, collapse = ", "))
+                  
+                  private$store[[sprintf("step%03d", private$n)]] <- data.frame(
+                    src_name         = src,
+                    step             = private$n,
+                    time             = Sys.time(),
+                    changed          = !identical(input, output),
+                    log_step         = step_name,
+                    frame_evolution  = cli::ansi_strip(metrics),
+                    column_evolution = ce_out,
+                    stringsAsFactors = FALSE
+                  )
                 },
                 
-                #' @description Called by `dump_log()`. No-op: output is already streamed
-                #' to the console in real time.
-                #' @param file Character. Output file path.
-                #' @param ... Additional arguments passed to write.csv()
-                # dump = function(...) invisible(NULL)
-                dump = function(file=NULL,...){
-                  log_df <- do.call(rbind,mget(ls(private$store), private$store))
-                  if (is.null(file)){ 
+                #' @description Called by `dump_log()`. Writes accumulated log to a CSV
+                #'   file. If `verbose = TRUE`, also prints the file path.
+                #' @param file Character. Output file path. Defaults to `"simple.csv"` or
+                #'   `"<label>_simple.csv"` when a label is set.
+                #' @param ... Additional arguments passed to [write.csv()].
+                dump = function(file = NULL, ...) {
+                  log_df <- do.call(rbind, mget(ls(private$store), private$store))
+                  if (is.null(file)) {
                     file <- "simple.csv"
-                    if (!is.null(self$label) && self$label != "" ) file <- paste(self$label,file,sep="_")
+                    if (!is.null(self$label) && nchar(self$label) > 0)
+                      file <- paste0(self$label, "_", file)
                   }
-                  write.csv(log_df, file=file, row.names = FALSE,...)
-                  if (is.character(file) && private$verbose){
-                    cli::cli_alert_info(sprintf("Dumped a log at %s", normalizePath(file)))
-                  }
+                  write.csv(log_df, file = file, row.names = FALSE, ...)
+                  if (is.character(file) && private$verbose)
+                    cli::cli_alert_success(sprintf("Log from %s step written to %s", self$label, normalizePath(file)))
                 }
               )
   )

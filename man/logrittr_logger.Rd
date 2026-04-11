@@ -37,7 +37,7 @@ iris \%L>\%
 logfile <- tempfile(fileext="r.log.csv")
 
 iris \%L>\%
-  start_log(log = logrittr_logger$new(verbose = FALSE)) \%L>\%
+  start_log(log = logrittr_logger$new(verbose = FALSE, label = "A reel simple example on iris df")) \%L>\%
   as_tibble()  \%L>\%
   filter(Sepal.Length < 5) \%L>\%
   mutate(rn = row_number()) \%L>\%
@@ -54,7 +54,14 @@ head(logdata)
 
 }
 \seealso{
-\code{\link[=logrittr_options]{logrittr_options()}}, \verb{\%>=\%}
+\code{\link[=logrittr_options]{logrittr_options()}}, \code{\link{\%>=\%}()}, \link{pipe_log}
+}
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{label}}{Set by lumberjack to the name of the tracked object.}
+}
+\if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
@@ -71,13 +78,17 @@ head(logdata)
 \subsection{Method \code{new()}}{
 Create a new \code{logrittr_logger}.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{logrittr_logger$new(verbose = TRUE)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{logrittr_logger$new(verbose = TRUE, src_name = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{verbose}}{Logical. Whether to print log messages to the console. Default to TRUE}
+\item{\code{verbose}}{Logical. Whether to print log messages to the console.
+Default \code{TRUE}.}
+
+\item{\code{src_name}}{Character. Optional name of the source object,
+displayed as a header rule before the first step.}
 }
 \if{html}{\out{</div>}}
 }
@@ -107,8 +118,8 @@ Called by lumberjack after each pipe step.
 \if{html}{\out{<a id="method-logrittr_logger-dump"></a>}}
 \if{latex}{\out{\hypertarget{method-logrittr_logger-dump}{}}}
 \subsection{Method \code{dump()}}{
-Called by \code{dump_log()}. No-op: output is already streamed
-to the console in real time.
+Called by \code{dump_log()}. Writes accumulated log to a CSV
+file. If \code{verbose = TRUE}, also prints the file path.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{logrittr_logger$dump(file = NULL, ...)}\if{html}{\out{</div>}}
 }
@@ -116,9 +127,10 @@ to the console in real time.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{file}}{Character. Output file path.}
+\item{\code{file}}{Character. Output file path. Defaults to \code{"simple.csv"} or
+\code{"<label>_simple.csv"} when a label is set.}
 
-\item{\code{...}}{Additional arguments passed to write.csv()}
+\item{\code{...}}{Additional arguments passed to \code{\link[=write.csv]{write.csv()}}.}
 }
 \if{html}{\out{</div>}}
 }
