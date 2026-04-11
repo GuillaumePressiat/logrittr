@@ -2,6 +2,7 @@
 % Please edit documentation in R/pipe.R
 \name{\%>=\%}
 \alias{\%>=\%}
+\alias{pipe_log}
 \title{Logging pipe operator}
 \usage{
 lhs \%>=\% rhs

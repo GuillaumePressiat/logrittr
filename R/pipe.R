@@ -40,10 +40,14 @@
 #'
 #' 
 #' @seealso [logrittr_options()]
+#' @rdname pipe_log
 #' @export
 `%>=%` <- function(lhs, rhs) {
   rhs_expr <- substitute(rhs)
   step_name <- paste(deparse(rhs_expr), collapse = " ")
+
+  # Capture lhs name BEFORE force() evaluates it
+  lhs_name <- paste(deparse(substitute(lhs)), collapse = " ")
 
   # Evaluate lhs first so depth is still at the parent level
   force(lhs)
@@ -53,6 +57,12 @@
 
   # Read depth AFTER lhs is resolved, BEFORE evaluating rhs
   depth     <- getOption(".LPipe_depth", default = 0L)
+  
+  # Print pipeline header on the first step of a main pipeline
+  if (depth == 0L && !isTRUE(attr(lhs, ".logrittr_pipe"))) {
+    .log_header(lhs_name, before_r, before_c)
+  }
+  
   full_call <- as.call(c(list(rhs_expr[[1]]), list(lhs), as.list(rhs_expr[-1])))
   t0        <- proc.time()["elapsed"]
 
@@ -78,5 +88,14 @@
   .log_step(step_name, depth, metrics)
   .log_cols(before_names, after_names)
 
+  # Mark result so the next step knows it's mid-pipeline
+  if (is.data.frame(result)) attr(result, ".logrittr_pipe") <- TRUE
   result
 }
+
+#' Pipe with logging
+#'
+#' @name pipe_log
+#' @rdname pipe_log
+NULL
+

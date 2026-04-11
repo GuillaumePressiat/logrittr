@@ -1,5 +1,17 @@
 # Internal formatting helpers — not exported
 
+.log_header <- function(name, nrows, ncols) {
+  lbl      <- .get_labels()
+  big_mark <- .opt("big_mark", "\u00a0")
+  rows_fmt <- formatC(prettyNum(nrows, big.mark = big_mark), width = 9, flag = " ")
+  cols_fmt <- formatC(prettyNum(ncols, big.mark = big_mark), width = 4, flag = " ")
+  cli::cli_rule(left = cli::col_grey(
+    paste0(name,
+           "  [", lbl$rows, ": ", rows_fmt,
+           "  ", lbl$cols, ": ", cols_fmt, "]")
+  ))
+}
+
 .fmt_n <- function(n, width) {
   big_mark <- .opt("big_mark", "\u00a0")
   formatC(prettyNum(n, big.mark = big_mark), width = width, flag = " ")

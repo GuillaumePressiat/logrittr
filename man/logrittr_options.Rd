@@ -47,3 +47,6 @@ logrittr_options(lang = "en", big_mark = ",", max_cols = 3)
 logrittr_options(wrap_width = 32, big_mark = " ", lang = "en", max_cols = 5)
 
 }
+\seealso{
+\code{\link{\%>=\%}()}, \link{pipe_log}
+}
