@@ -24,14 +24,31 @@ calls. The first step always shows \verb{NA ms}.
 library(lumberjack)
 library(dplyr)
 
-iris                                     \%L>\%
+iris \%L>\%
   start_log(log = logrittr_logger$new()) \%L>\%
-  as_tibble()                            \%L>\%
-  filter(Sepal.Length < 5)               \%L>\%
-  mutate(rn = row_number())              \%L>\%
-  group_by(Species)                      \%L>\%
-  summarise(n = n_distinct(rn))          \%L>\%
+  as_tibble() \%L>\%
+  filter(Sepal.Length < 5) \%L>\%
+  mutate(rn = row_number()) \%L>\%
+  group_by(Species) \%L>\%
+  summarise(n = n_distinct(rn)) \%L>\%
   dump_log(stop = TRUE)
+  
+  
+# logfile <- tempfile(fileext=".r.log.txt")
+# 
+#  iris \%L>\%
+#   start_log(log = logrittr_logger$new()) \%L>\%
+#   as_tibble()  \%L>\%
+#   filter(Sepal.Length < 5) \%L>\%
+#   mutate(rn = row_number()) \%L>\%
+#   group_by(Species) \%L>\%
+#   summarise(n = n_distinct(rn)) \%L>\%
+#   dump_log(file=logfile)
+#   
+#   logdata <- read.lines(logfile)
+#   
+#   head(logdata)
+  
 }
 
 }

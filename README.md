@@ -122,7 +122,8 @@ logrittr_options(lang = "fr", big_mark = "\u00a0", wrap_width = 52)
 
 ## Why not `tidylog`?
 
-`tidylog` is a really neat package that gives me motivation for this one.
+
+[tidylog]() is a really neat package that gives me motivation for this one.
 `tidylog` works by masking dplyr functions which can cause subtle conflicts
 with other packages. 
 
@@ -130,15 +131,44 @@ Anyway this also was a moment for me to test a new programmer tool that
 is used a lot for programming at this time.
 
 `logrittr` uses a custom pipe operator and never touches
-the dplyr namespace.
+the dplyr namespace. Its console output is colorful and informative thanks to the cli package.
+
+## Working with `lumberjack`
+
+If you already know the [lumberjack](https://github.com/markvanderloo/lumberjack) package, 
+compatibility is available with logrittr (timings are approximates).
+
+Calling `logrittr_logger$new()`:
+
+```r
+library(lumberjack)
+library(dplyr)
+
+iris  %L>%
+  start_log(log = logrittr_logger$new()) %L>%
+  as_tibble() %L>%
+  filter(Sepal.Length < 5) %L>%
+  mutate(rn = row_number()) %L>%
+  group_by(Species) %L>%
+  summarise(n = n_distinct(rn)) %L>%
+  dump_log(stop = TRUE)
+```
 
 ## Limitations 
 
-Like `tidylog`, logrittr only works with dplyr pipelines on R data.frames (in memory)
+- Like `tidylog`, logrittr only works with dplyr pipelines on R data.frames (in memory)
 and is not able to do so with dbplyr pipelines from databases (remote/lazy table).
+
+- Join cardinalities nicely done in tidylog are difficult to have from the pipe 
+as join is already done, at this time we only show N row and N col evolution (before / after). 
 
 ## Roadmap
 
-- File sink for production pipelines
-- `with_logging()` wrapper for `|>` compatibility
+This package at this time is a proof of concept and may not evolve much. It depends of feedbacks.
+
+- File sink for production pipelines (possible with lumberjack, todo: structure log data, pass log 
+as a data.frame to dump a csv or formatted lines passed to cli)
+- Join's cardinalities (get informations from before / after pipe) but it has drawbacks (slow)
+- `with_logging()` wrapper for `|>` compatibility (dream)
 - `loglevel` option to mute sub-pipeline steps
+
