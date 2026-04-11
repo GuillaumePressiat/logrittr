@@ -142,7 +142,7 @@ logrittr_options(lang = "en", big_mark = ",", wrap_width = 52)
 ## Why not `tidylog`?
 
 
-[tidylog]() is a really neat package that gives me motivation for this one.
+[tidylog](https://github.com/elbersb/tidylog) is a really neat package that gives me motivation for this one.
 `tidylog` works by masking dplyr functions which can cause subtle conflicts
 with other packages. 
 
