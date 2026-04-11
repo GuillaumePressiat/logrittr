@@ -191,3 +191,39 @@ old <- logrittr_options(lang = "fr", big_mark = ",")
 # ... work ...
 do.call(logrittr_options, old)  # restore previous state
 ```
+
+
+## Using logrittr with lumberjack
+
+If you already use the `lumberjack` package, `logrittr_logger` plugs directly
+into its `%L>%` pipe. The same console output as `%>=%` is produced, and you
+keep access to all lumberjack features (`run_file()`, custom loggers, etc.).
+
+```{r lumberjack}
+library(lumberjack)
+library(dplyr)
+
+iris                                     %L>%
+  start_log(log = logrittr_logger$new()) %L>%
+  as_tibble()                            %L>%
+  filter(Sepal.Length < 5)               %L>%
+  mutate(rn = row_number())              %L>%
+  group_by(Species)                      %L>%
+  summarise(n = n_distinct(rn))          %L>%
+  dump_log(stop = TRUE)
+```
+
+```
+i as_tibble()                                   rows:       150 +0        cols:    5 +0    [  NA ms]
+i filter(Sepal.Length < 5)                      rows:        22 -128      cols:    5 +0    [   1.0 ms]
+i mutate(rn = row_number())                     rows:        22 +0        cols:    6 +1    [   0.0 ms]
+  added: rn
+i group_by(Species)                             rows:        22 +0        cols:    6 +0    [   0.0 ms]
+i summarise(n = n_distinct(rn))                 rows:         1 -21       cols:    2 -4    [   1.0 ms]
+  dropped: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, rn
+  added: n
+```
+
+The first step always shows `NA ms` because lumberjack does not provide a
+start time -- elapsed is measured as the interval between consecutive steps.
+
