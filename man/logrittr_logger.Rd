@@ -37,7 +37,8 @@ iris \%L>\%
 logfile <- tempfile(fileext="r.log.csv")
 
 iris \%L>\%
-  start_log(log = logrittr_logger$new(verbose = FALSE, label = "A reel simple example on iris df")) \%L>\%
+  start_log(log = logrittr_logger$new(verbose = FALSE, 
+  label = "A reel simple example on iris df")) \%L>\%
   as_tibble()  \%L>\%
   filter(Sepal.Length < 5) \%L>\%
   mutate(rn = row_number()) \%L>\%

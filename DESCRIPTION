@@ -7,7 +7,7 @@ Description: Provides the `%>=%` pipe operator that logs row counts, column
     counts, added/dropped columns, and timing at each step of a dplyr pipeline,
     inspired by the SAS DATA step log. Supports nested pipelines and configurable
     options for display width, number formatting, and language.
-License: GPL-2 + file LICENSE
+License: GPL-2
 URL: https://guillaumepressiat.github.io/logrittr/
 BugReports: https://github.com/GuillaumePressiat/logrittr/issues
 Encoding: UTF-8
@@ -24,3 +24,4 @@ Suggests:
     R6,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr
