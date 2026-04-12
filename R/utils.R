@@ -18,7 +18,10 @@
 }
 
 .fmt_delta <- function(d, width) {
-  s <- formatC(sprintf("%+d", d), width = -width, flag = "-")
+  big_mark <- .opt("big_mark", "\u00a0")
+  sign     <- if (d >= 0) "+" else "-"
+  s        <- paste0(sign, prettyNum(abs(d), big.mark = big_mark))
+  s        <- formatC(s, width = -width, flag = "-")
   if (d < 0) cli::col_red(s) else if (d > 0) cli::col_green(s) else cli::col_grey(s)
 }
 
