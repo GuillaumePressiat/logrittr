@@ -99,3 +99,23 @@ test_that("logrittr_logger$add() runs without error", {
   expect_no_error(logger$add(meta, input, output))
 })
 
+
+# -- activate / deactivate ------------------------------------------------
+
+test_that("logrittr_activate() assigns %>= to global env", {
+  logrittr_activate()
+  on.exit(logrittr_deactivate())
+  pipe_fn <- get("%>%", envir = globalenv())
+  expect_identical(pipe_fn, `%>=%`)
+})
+
+test_that("logrittr_deactivate() removes %>= from global env or restores magrittr", {
+  logrittr_activate()
+  logrittr_deactivate()
+  if (requireNamespace("magrittr", quietly = TRUE)) {
+    pipe_fn <- get("%>%", envir = globalenv())
+    expect_identical(pipe_fn, magrittr::`%>%`)
+  } else {
+    expect_false(exists("%>%", envir = globalenv(), inherits = FALSE))
+  }
+})
