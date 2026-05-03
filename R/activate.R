@@ -55,6 +55,7 @@ logrittr_activate <- function() {
 #' }
 #'
 #' @seealso [logrittr_activate()], [logrittr_hook()]
+#' @importFrom magrittr %>% 
 #' @export
 logrittr_deactivate <- function() {
   if (requireNamespace("magrittr", quietly = TRUE)) {

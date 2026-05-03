@@ -3,3 +3,4 @@
 _pkgdown.yml
 pkgdown
 LICENSE
+^cran-comments\.md$
