@@ -1,5 +1,13 @@
 # logrittr (development version)
 
+* Added `logrittr_activate()` / `logrittr_deactivate()`: replace `%>%` in the
+  global environment with `%>=%` (and restore it) so existing pipelines are
+  logged without any code change. Only for `%>%` pipe.
+* Added `logrittr_hook()`: knitr source hook that rewrites `|>` or `%>%` to `%>=%`
+  in chunks where `logrittr = TRUE` is set, enabling native-pipe logging in
+  R Markdown and Quarto documents.
+
+
 # logrittr 0.1.0
 
 First release (proof of concept).

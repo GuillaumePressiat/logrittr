@@ -8,7 +8,10 @@
 <br>
 <hr>
 
-![Example](man/figures/pastels_example.png)
+![Example with %>=%](man/figures/pastels_example.png)
+
+
+![Example with %>%](man/figures/iris_example_activate.png)
 
 ## Motivation
 
@@ -70,6 +73,11 @@ See https://guillaumepressiat.r-universe.dev/logrittr
 
 ## Usage
 
+
+### With logrittr pipe
+
+The simplest approach -- replace `%>%` or `|>` with `%>=%` where you want logging.
+
 ```r
 library(logrittr)
 library(dplyr)
@@ -103,6 +111,52 @@ iris %>=%
   added: n
 ```
 
+### With magrittr pipe `%>%`
+
+Replace `%>%` in the global environment with `%>=%` (and restore it) 
+so existing pipelines are logged without any code change with activate / deactivate 
+at the beginning and the end of a script / step.
+
+```r
+library(logrittr)
+library(dplyr)
+
+logrittr_activate()
+
+iris %>%
+  as_tibble() %>%
+  filter(Sepal.Length < 5) %>%
+  group_by(Species) %>%
+  summarise(n = n())
+
+logrittr_deactivate()
+```
+
+### In Rmarkdown or Quarto (hook)
+
+```r
+# In your setup chunk:
+library(logrittr)
+
+knitr::opts_chunk$set(
+collapse  = TRUE,
+comment   = "#>",
+message   = TRUE   # needed to show logrittr output (uses message())
+)
+
+# For |> pipes (opt-in per chunk with logrittr = TRUE):
+logrittr_hook()
+
+Then in any chunk you want logged (native pipe):
+#' ```{r, logrittr = TRUE}
+iris |>
+  as_tibble() |>
+  filter(Sepal.Length < 5) |>
+  group_by(Species) |>
+  summarise(n = n())
+#'```
+```
+
 ### Screenshot
 
 ![Example](man/figures/nycflights13_example.png)
@@ -122,6 +176,9 @@ nycflights13::flights %>=%
   glimpse()
 
 ```
+
+
+
 
 ## Options
 
@@ -200,7 +257,13 @@ as join is already done, at this time we only show N row and N col evolution (be
 
 This package at this time is a proof of concept and may not evolve much. It depends of feedbacks.
 
+Good news: 
+
+- Integration with the magrittr pipe `%>%` is now available via logrittr_activate (0.2.0)
+- a knitr hook can also helps in iterative steps in Rmarkdown or Quarto
+
+Nevertheless, we can list todo:
+
 - Join's cardinalities (get informations from before / after pipe) but it has drawbacks (slow)
-- `with_logging()` wrapper for `|>` compatibility (dream)
 - `loglevel` option to mute sub-pipeline steps
 
