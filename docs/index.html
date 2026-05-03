@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">logrittr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -85,7 +85,10 @@
 </blockquote>
 <br><hr>
 <div class="float">
-<img src="reference/figures/pastels_example.png" alt="Example"><div class="figcaption">Example</div>
+<img src="reference/figures/pastels_example.png" alt="Example with %&gt;=%"><div class="figcaption">Example with %&gt;=%</div>
+</div>
+<div class="float">
+<img src="reference/figures/iris_example_activate.png" alt="Example with %&gt;%"><div class="figcaption">Example with %&gt;%</div>
 </div>
 <div class="section level2">
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
@@ -134,6 +137,10 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
+<div class="section level3">
+<h3 id="with-logrittr-pipe">With logrittr pipe<a class="anchor" aria-label="anchor" href="#with-logrittr-pipe"></a>
+</h3>
+<p>The simplest approach – replace <code>%&gt;%</code> or <code>|&gt;</code> with <code>%&gt;=%</code> where you want logging.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://guillaumepressiat.github.io/logrittr/">logrittr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -162,13 +169,57 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 ℹ summarise(n = n_distinct(rn))          rows:         1 -19       cols:    2 -4    [   2.0 ms]
   dropped: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, rn
   added: n</code></pre>
+</div>
+<div class="section level3">
+<h3 id="with-magrittr-pipe-">With magrittr pipe <code>%&gt;%</code>
+<a class="anchor" aria-label="anchor" href="#with-magrittr-pipe-"></a>
+</h3>
+<p>Replace <code>%&gt;%</code> in the global environment with <code>%&gt;=%</code> (and restore it) so existing pipelines are logged without any code change with activate / deactivate at the beginning and the end of a script / step.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://guillaumepressiat.github.io/logrittr/">logrittr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/logrittr_activate.html">logrittr_activate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/logrittr_deactivate.html">logrittr_deactivate</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="in-rmarkdown-or-quarto-hook">In Rmarkdown or Quarto (hook)<a class="anchor" aria-label="anchor" href="#in-rmarkdown-or-quarto-hook"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># In your setup chunk:</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(logrittr)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="at">collapse  =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="at">comment   =</span> <span class="st">"#&gt;"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="at">message   =</span> <span class="cn">TRUE</span>   <span class="co"># needed to show logrittr output (uses message())</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># For |&gt; pipes (opt-in per chunk with logrittr = TRUE):</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="fu">logrittr_hook</span>()</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>Then <span class="cf">in</span> any chunk you want <span class="fu">logged</span> (native pipe)<span class="sc">:</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#' ```{r, logrittr = TRUE}</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="fu">filter</span>(Sepal.Length <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#'```</span></span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="screenshot">Screenshot<a class="anchor" aria-label="anchor" href="#screenshot"></a>
 </h3>
 <div class="float">
 <img src="reference/figures/nycflights13_example.png" alt="Example"><div class="figcaption">Example</div>
 </div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://guillaumepressiat.github.io/logrittr/">logrittr</a></span><span class="op">)</span></span>
 <span></span>
@@ -185,7 +236,7 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <div class="section level2">
 <h2 id="options">Options<a class="anchor" aria-label="anchor" href="#options"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Switch to French, comma as thousands separator, wider labels</span></span>
 <span><span class="fu"><a href="reference/logrittr_options.html">logrittr_options</a></span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"fr"</span>, big_mark <span class="op">=</span> <span class="st">"\u00a0"</span>, wrap_width <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span>
 <span></span>
@@ -231,7 +282,7 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 </h2>
 <p>If you already know the <a href="https://github.com/markvanderloo/lumberjack" class="external-link">lumberjack</a> package, compatibility is available with logrittr (timings are approximates).</p>
 <p>Calling <code>logrittr_logger$new()</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/markvanderloo/lumberjack" class="external-link">lumberjack</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -269,10 +320,14 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <h2 id="roadmap">Roadmap<a class="anchor" aria-label="anchor" href="#roadmap"></a>
 </h2>
 <p>This package at this time is a proof of concept and may not evolve much. It depends of feedbacks.</p>
+<p>Good news:</p>
+<ul>
+<li>Integration with the magrittr pipe <code>%&gt;%</code> is now available via logrittr_activate (0.2.0)</li>
+<li>a knitr hook can also helps in iterative steps inside Rmarkdown or Quarto</li>
+</ul>
+<p>Nevertheless, a to-do list:</p>
 <ul>
 <li>Join’s cardinalities (get informations from before / after pipe) but it has drawbacks (slow)</li>
-<li>
-<code>with_logging()</code> wrapper for <code>|&gt;</code> compatibility (dream)</li>
 <li>
 <code>loglevel</code> option to mute sub-pipeline steps</li>
 </ul>
@@ -292,9 +347,7 @@ NOTE: The data set WORK.RESULT has 0 observations and 11 variables.</code></pre>
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>
-<a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a> + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
+<li><a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a></li>
 </ul>
 </div>
 

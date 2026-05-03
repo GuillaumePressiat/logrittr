@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">logrittr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -52,7 +52,9 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="logrittr-development-version">logrittr (development version)<a class="anchor" aria-label="anchor" href="#logrittr-development-version"></a></h2>
-</div>
+<ul><li>Added <code><a href="../reference/logrittr_activate.html">logrittr_activate()</a></code> / <code><a href="../reference/logrittr_deactivate.html">logrittr_deactivate()</a></code>: replace <code>%&gt;%</code> in the global environment with <code>%&gt;=%</code> (and restore it) so existing pipelines are logged without any code change. Only for <code>%&gt;%</code> pipe.</li>
+<li>Added <code><a href="../reference/logrittr_hook.html">logrittr_hook()</a></code>: knitr source hook that rewrites <code>|&gt;</code> or <code>%&gt;%</code> to <code>%&gt;=%</code> in chunks where <code>logrittr = TRUE</code> is set, enabling native-pipe logging in R Markdown and Quarto documents.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="logrittr-010">logrittr 0.1.0<a class="anchor" aria-label="anchor" href="#logrittr-010"></a></h2>
 <p>First release (proof of concept).</p>
