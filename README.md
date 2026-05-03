@@ -260,9 +260,9 @@ This package at this time is a proof of concept and may not evolve much. It depe
 Good news: 
 
 - Integration with the magrittr pipe `%>%` is now available via logrittr_activate (0.2.0)
-- a knitr hook can also helps in iterative steps in Rmarkdown or Quarto
+- a knitr hook can also helps in iterative steps inside Rmarkdown or Quarto
 
-Nevertheless, we can list todo:
+Nevertheless, a to-do list:
 
 - Join's cardinalities (get informations from before / after pipe) but it has drawbacks (slow)
 - `loglevel` option to mute sub-pipeline steps
