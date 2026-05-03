@@ -1,4 +1,4 @@
-# logrittr (development version)
+# logrittr (0.2.0)
 
 * Added `logrittr_activate()` / `logrittr_deactivate()`: replace `%>%` in the
   global environment with `%>=%` (and restore it) so existing pipelines are
