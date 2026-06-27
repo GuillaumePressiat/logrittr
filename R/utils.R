@@ -1,5 +1,23 @@
 # Internal formatting helpers — not exported
 
+# Build the call rhs(lhs, ...) in a way that is robust to:
+#   - plain symbols:      df %>=%  nrow      -> nrow(df)
+#   - zero-arg calls:     df %>=%  nrow()    -> nrow(df)
+#   - calls with args:    df %>=%  filter(x > 1) -> filter(df, x > 1)
+#   - named-first arg:    df %>=%  merge(y, by = "id") -> merge(df, y, by = "id")
+#
+# rhs_expr : the raw substituted rhs (a symbol or a call)
+# lhs_val  : the already-evaluated lhs object (inserted as first positional arg)
+.build_call <- function(rhs_expr, lhs_val) {
+  if (is.symbol(rhs_expr)) {
+    # bare symbol: nrow, View, print …
+    as.call(list(rhs_expr, lhs_val))
+  } else {
+    # call: fn(...) -> fn(lhs, ...)
+    as.call(c(list(rhs_expr[[1]]), list(lhs_val), as.list(rhs_expr[-1])))
+  }
+}
+
 .log_header <- function(name, nrows, ncols) {
   lbl      <- .get_labels()
   big_mark <- .opt("big_mark", "\u00a0")
@@ -24,9 +42,15 @@
 
 .build_metrics <- function(after_r, after_c, dr, dc, elapsed) {
   lbl <- .get_labels()
+
+  # When the result is not a data.frame (e.g. nrow(), View(), print()),
+  # row/col counts are NA: show a dash instead of a number + delta.
+  fmt_count <- function(n, width)  if (is.na(n)) formatC("-", width = width, flag = " ") else .fmt_n(n, width)
+  fmt_delta <- function(d, width)  if (is.na(d)) formatC("",  width = width, flag = " ") else .fmt_delta(d, width)
+
   paste0(
-    "  ", lbl$rows, ": ", .fmt_n(after_r, width = 9), " ", .fmt_delta(dr, width = 8),
-    "  ", lbl$cols, ": ", .fmt_n(after_c, width = 4), " ", .fmt_delta(dc, width = 4),
+    "  ", lbl$rows, ": ", fmt_count(after_r, width = 9), " ", fmt_delta(dr, width = 8),
+    "  ", lbl$cols, ": ", fmt_count(after_c, width = 4), " ", fmt_delta(dc, width = 4),
     "  [", cli::col_grey(sprintf("%6.1f ms", elapsed)), "]"
   )
 }

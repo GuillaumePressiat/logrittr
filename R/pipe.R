@@ -44,6 +44,13 @@
 #' @export
 `%>=%` <- function(lhs, rhs) {
   rhs_expr <- substitute(rhs)
+
+  # --- verbose = FALSE : redirection vers magrittr, zéro overhead ---
+  if (!isTRUE(.opt("verbose", TRUE))) {
+    full_call <- .build_call(rhs_expr, substitute(lhs))
+    return(eval(full_call, envir = parent.frame()))
+  }
+
   step_name <- paste(deparse(rhs_expr), collapse = " ")
 
   # Capture lhs name BEFORE force() evaluates it
@@ -51,19 +58,19 @@
 
   # Evaluate lhs first so depth is still at the parent level
   force(lhs)
-  before_r     <- if (is.data.frame(lhs)) nrow(lhs)   else NA
-  before_c     <- if (is.data.frame(lhs)) ncol(lhs)   else NA
+  before_r     <- if (is.data.frame(lhs)) nrow(lhs)   else NA_integer_
+  before_c     <- if (is.data.frame(lhs)) ncol(lhs)   else NA_integer_
   before_names <- if (is.data.frame(lhs)) names(lhs)  else character(0)
 
   # Read depth AFTER lhs is resolved, BEFORE evaluating rhs
-  depth     <- getOption(".LPipe_depth", default = 0L)
-  
+  depth <- getOption(".LPipe_depth", default = 0L)
+
   # Print pipeline header on the first step of a main pipeline
   if (depth == 0L && !isTRUE(attr(lhs, ".logrittr_pipe"))) {
-    .log_header(lhs_name, before_r, before_c)
+    if (!is.na(before_r)) .log_header(lhs_name, before_r, before_c)
   }
-  
-  full_call <- as.call(c(list(rhs_expr[[1]]), list(lhs), as.list(rhs_expr[-1])))
+
+  full_call <- .build_call(rhs_expr, lhs)
   t0        <- proc.time()["elapsed"]
 
   # Increment only around rhs evaluation so sub-pipelines see depth + 1
@@ -73,15 +80,15 @@
     finally = options(.LPipe_depth = depth)
   )
 
-  after_r    <- if (is.data.frame(result)) nrow(result)   else NA
-  after_c    <- if (is.data.frame(result)) ncol(result)   else NA
-  after_names <- if (is.data.frame(result)) names(result) else character(0)
-  elapsed    <- round((proc.time()["elapsed"] - t0) * 1000, 1)
+  after_r     <- if (is.data.frame(result)) nrow(result)   else NA_integer_
+  after_c     <- if (is.data.frame(result)) ncol(result)   else NA_integer_
+  after_names <- if (is.data.frame(result)) names(result)  else character(0)
+  elapsed     <- round((proc.time()["elapsed"] - t0) * 1000, 1)
 
   metrics <- .build_metrics(
     after_r, after_c,
-    after_r - before_r,
-    after_c - before_c,
+    if (!is.na(after_r) && !is.na(before_r)) after_r - before_r else NA_integer_,
+    if (!is.na(after_c) && !is.na(before_c)) after_c - before_c else NA_integer_,
     elapsed
   )
 

@@ -8,7 +8,8 @@ logrittr_options(
   wrap_width = NULL,
   big_mark = NULL,
   lang = NULL,
-  max_cols = NULL
+  max_cols = NULL,
+  verbose = NULL
 )
 }
 \arguments{
@@ -26,6 +27,10 @@ to disable.}
 \code{added}/\code{dropped} lines. If there are more, the first \code{max_cols} are
 shown followed by \code{"and N others"}. Default: \code{5}. Use \code{Inf} to always
 show all columns.}
+
+\item{verbose}{Logical. If \code{FALSE}, \verb{\%>=\%} behaves exactly like magrittr's
+\verb{\%>\%}: no logging, no timing, no overhead. Useful to switch from debug
+mode to production without changing pipeline code. Default: \code{TRUE}.}
 }
 \value{
 Invisibly returns the previous values of any option that was changed,
@@ -43,8 +48,13 @@ logrittr_options()
 # Switch to English, comma thousands separator, show up to 3 col names
 logrittr_options(lang = "en", big_mark = ",", max_cols = 3)
 
+# Disable logging (silent pipe, like plain \%>\%)
+logrittr_options(verbose = FALSE)
+logrittr_options(verbose = TRUE)   # re-enable
+
 # Reset to defaults
-logrittr_options(wrap_width = 32, big_mark = " ", lang = "en", max_cols = 5)
+logrittr_options(wrap_width = 32, big_mark = " ", lang = "en",
+                 max_cols = 5, verbose = TRUE)
 
 }
 \seealso{
