@@ -52,11 +52,15 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.0" id="logrittr-030">logrittr 0.3.0<a class="anchor" aria-label="anchor" href="#logrittr-030"></a></h2>
-<ul><li><p><code>logrittr_options(verbose = FALSE)</code>: désactive tout le logging de <code>%&gt;=%</code>, qui se comporte alors exactement comme <code>magrittr::%&gt;%</code> — aucun message, aucun overhead. Utile pour basculer entre mode débogage et mode production sans modifier les pipelines.</p></li>
-<li><p>Correction : <code>%&gt;=%</code> ne plante plus avec les fonctions R base qui ne retournent pas un <code>data.frame</code> (<code>nrow</code>, <code>ncol</code>, <code>names</code>, <code>print</code>, <code>View</code>, <code>head</code>, …). La syntaxe <code>df %&gt;=%  nrow</code> (symbole nu) est désormais supportée.</p></li>
-<li><p>Correction : les deltas de lignes/colonnes (<code>+n</code> / <code>-n</code>) affichent un tiret au lieu de provoquer une erreur quand le résultat n’est pas un <code>data.frame</code>.</p></li>
-<li><p>Added <code><a href="../reference/logrittr_activate.html">logrittr_activate()</a></code> / <code><a href="../reference/logrittr_deactivate.html">logrittr_deactivate()</a></code>: replace <code>%&gt;%</code> in the global environment with <code>%&gt;=%</code> (and restore it) so existing pipelines are logged without any code change. Only for <code>%&gt;%</code> pipe.</p></li>
-<li><p>Added <code><a href="../reference/logrittr_hook.html">logrittr_hook()</a></code>: knitr source hook that rewrites <code>|&gt;</code> or <code>%&gt;%</code> to <code>%&gt;=%</code> in chunks where <code>logrittr = TRUE</code> is set, enabling native-pipe logging in R Markdown and Quarto documents.</p></li>
+<ul><li>
+<code>logrittr_options(verbose = FALSE)</code>: when set, <code>%&gt;=%</code> behaves exactly like a plain pipe — no logging, no timing, zero overhead. Flip one option at the top of a script to switch between exploratory and production mode without touching any pipe symbol.</li>
+<li>Fix: <code>%&gt;=%</code> no longer errors with base R functions that do not return a <code>data.frame</code> (<code>nrow</code>, <code>ncol</code>, <code>names</code>, <code>print</code>, <code>View</code>, <code>head</code>, …). Bare symbol syntax (<code>df %&gt;=% nrow</code>) is now supported.</li>
+<li>Fix: row/col deltas display a dash instead of throwing an error when the result of a step is not a <code>data.frame</code>.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.2.0" id="logrittr-020">logrittr 0.2.0<a class="anchor" aria-label="anchor" href="#logrittr-020"></a></h2>
+<ul><li>Added <code><a href="../reference/logrittr_activate.html">logrittr_activate()</a></code> / <code><a href="../reference/logrittr_deactivate.html">logrittr_deactivate()</a></code>: replace <code>%&gt;%</code> in the global environment with <code>%&gt;=%</code> (and restore it) so existing pipelines are logged without any code change. Only for <code>%&gt;%</code> pipe.</li>
+<li>Added <code><a href="../reference/logrittr_hook.html">logrittr_hook()</a></code>: knitr source hook that rewrites <code>|&gt;</code> or <code>%&gt;%</code> to <code>%&gt;=%</code> in chunks where <code>logrittr = TRUE</code> is set, enabling native-pipe logging in R Markdown and Quarto documents.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="logrittr-010">logrittr 0.1.0<a class="anchor" aria-label="anchor" href="#logrittr-010"></a></h2>
