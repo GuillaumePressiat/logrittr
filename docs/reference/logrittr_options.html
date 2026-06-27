@@ -18,7 +18,7 @@ set options, or with no arguments to return current values."><meta property="og:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">logrittr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -62,7 +62,8 @@ set options, or with no arguments to return current values.</p>
 <span>  wrap_width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  big_mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lang <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  max_cols <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  max_cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -92,6 +93,12 @@ to disable.</p></dd>
 shown followed by <code>"and N others"</code>. Default: <code>5</code>. Use <code>Inf</code> to always
 show all columns.</p></dd>
 
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Logical. If <code>FALSE</code>, <code>%&gt;=%</code> behaves exactly like magrittr's
+<code>%&gt;%</code>: no logging, no timing, no overhead. Useful to switch from debug
+mode to production without changing pipeline code. Default: <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -120,12 +127,20 @@ options as a named list (visibly).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $max_cols</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $verbose</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Switch to English, comma thousands separator, show up to 3 col names</span></span></span>
 <span class="r-in"><span><span class="fu">logrittr_options</span><span class="op">(</span>lang <span class="op">=</span> <span class="st">"en"</span>, big_mark <span class="op">=</span> <span class="st">","</span>, max_cols <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Disable logging (silent pipe, like plain %&gt;%)</span></span></span>
+<span class="r-in"><span><span class="fu">logrittr_options</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">logrittr_options</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>   <span class="co"># re-enable</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Reset to defaults</span></span></span>
-<span class="r-in"><span><span class="fu">logrittr_options</span><span class="op">(</span>wrap_width <span class="op">=</span> <span class="fl">32</span>, big_mark <span class="op">=</span> <span class="st">" "</span>, lang <span class="op">=</span> <span class="st">"en"</span>, max_cols <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">logrittr_options</span><span class="op">(</span>wrap_width <span class="op">=</span> <span class="fl">32</span>, big_mark <span class="op">=</span> <span class="st">" "</span>, lang <span class="op">=</span> <span class="st">"en"</span>,</span></span>
+<span class="r-in"><span>                 max_cols <span class="op">=</span> <span class="fl">5</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
