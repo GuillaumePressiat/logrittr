@@ -1,4 +1,16 @@
-# logrittr (0.2.0)
+# logrittr 0.3.0
+
+* `logrittr_options(verbose = FALSE)`: désactive tout le logging de `%>=%`,
+  qui se comporte alors exactement comme `magrittr::%>%` — aucun message,
+  aucun overhead. Utile pour basculer entre mode débogage et mode production
+  sans modifier les pipelines.
+* Correction : `%>=%` ne plante plus avec les fonctions R base qui ne
+  retournent pas un `data.frame` (`nrow`, `ncol`, `names`, `print`, `View`,
+  `head`, …). La syntaxe `df %>=%  nrow` (symbole nu) est désormais supportée.
+* Correction : les deltas de lignes/colonnes (`+n` / `-n`) affichent un tiret
+  au lieu de provoquer une erreur quand le résultat n'est pas un `data.frame`.
+
+
 
 * Added `logrittr_activate()` / `logrittr_deactivate()`: replace `%>%` in the
   global environment with `%>=%` (and restore it) so existing pipelines are

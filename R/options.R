@@ -15,6 +15,9 @@
 #'   `added`/`dropped` lines. If there are more, the first `max_cols` are
 #'   shown followed by `"and N others"`. Default: `5`. Use `Inf` to always
 #'   show all columns.
+#' @param verbose Logical. If `FALSE`, `%>=%` behaves exactly like magrittr's
+#'   `%>%`: no logging, no timing, no overhead. Useful to switch from debug
+#'   mode to production without changing pipeline code. Default: `TRUE`.
 #'
 #' @return Invisibly returns the previous values of any option that was changed,
 #'   as a named list. When called with no arguments, returns all current
@@ -27,21 +30,29 @@
 #' # Switch to English, comma thousands separator, show up to 3 col names
 #' logrittr_options(lang = "en", big_mark = ",", max_cols = 3)
 #'
+#' # Disable logging (silent pipe, like plain %>%)
+#' logrittr_options(verbose = FALSE)
+#' logrittr_options(verbose = TRUE)   # re-enable
+#'
 #' # Reset to defaults
-#' logrittr_options(wrap_width = 32, big_mark = " ", lang = "en", max_cols = 5)
+#' logrittr_options(wrap_width = 32, big_mark = " ", lang = "en",
+#'                  max_cols = 5, verbose = TRUE)
 #'
 #' @seealso \code{\link{\%>=\%}()}, \link{pipe_log}
 #' @export
 logrittr_options <- function(wrap_width = NULL, big_mark = NULL,
-                             lang = NULL, max_cols = NULL) {
+                             lang = NULL, max_cols = NULL,
+                             verbose = NULL) {
   defaults <- list(
     logrittr.wrap_width = 32L,
     logrittr.big_mark   = "\u00a0",
     logrittr.lang       = "en",
-    logrittr.max_cols   = 5L
+    logrittr.max_cols   = 5L,
+    logrittr.verbose    = TRUE
   )
   
-  if (is.null(wrap_width) && is.null(big_mark) && is.null(lang) && is.null(max_cols)) {
+  if (is.null(wrap_width) && is.null(big_mark) && is.null(lang) &&
+      is.null(max_cols) && is.null(verbose)) {
     current <- lapply(names(defaults), getOption)
     names(current) <- sub("logrittr\\.", "", names(defaults))
     current <- Map(function(cur, def) if (is.null(cur)) def else cur,
@@ -55,15 +66,19 @@ logrittr_options <- function(wrap_width = NULL, big_mark = NULL,
   if (!is.null(max_cols) && !is.numeric(max_cols) || isTRUE(max_cols < 1L)) {
     stop("`max_cols` must be a positive number or Inf.", call. = FALSE)
   }
+  if (!is.null(verbose) && !is.logical(verbose)) {
+    stop("`verbose` must be TRUE or FALSE.", call. = FALSE)
+  }
   
   new_opts <- list()
   if (!is.null(wrap_width)) new_opts$logrittr.wrap_width <- as.integer(wrap_width)
   if (!is.null(big_mark))   new_opts$logrittr.big_mark   <- big_mark
   if (!is.null(lang))       new_opts$logrittr.lang       <- lang
   if (!is.null(max_cols))   new_opts$logrittr.max_cols   <- max_cols
+  if (!is.null(verbose))    new_opts$logrittr.verbose    <- verbose
   
   old <- lapply(names(new_opts), getOption)
-  names(old) <- sub("logrittr\\.", "", names(new_opts))  # strip prefix so do.call works
+  names(old) <- sub("logrittr\\.", "", names(new_opts))
   do.call(options, new_opts)
   invisible(old)
 }

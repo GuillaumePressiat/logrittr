@@ -7,7 +7,8 @@ small_df <- function() data.frame(
 )
 
 reset_opts <- function() {
-  logrittr_options(wrap_width = 32L, big_mark = "\u00a0", lang = "en", max_cols = 5L)
+  logrittr_options(wrap_width = 32L, big_mark = "\u00a0", lang = "en",
+                   max_cols = 5L, verbose = TRUE)
 }
 
 # -- pipe -----------------------------------------------------------------
@@ -100,7 +101,70 @@ test_that("logrittr_logger$add() runs without error", {
 })
 
 
-# -- activate / deactivate ------------------------------------------------
+# -- verbose = FALSE ------------------------------------------------------
+
+test_that("verbose = FALSE: %>=% returns correct result silently", {
+  reset_opts()
+  old <- logrittr_options(verbose = FALSE)
+  on.exit(do.call(logrittr_options, old))
+
+  result <- small_df() %>=% subset(x > 5)
+  expect_equal(nrow(result), 5L)
+  expect_equal(ncol(result), 3L)
+})
+
+test_that("verbose = FALSE: no messages emitted", {
+  reset_opts()
+  old <- logrittr_options(verbose = FALSE)
+  on.exit(do.call(logrittr_options, old))
+
+  expect_silent(small_df() %>=% subset(x > 5))
+})
+
+test_that("logrittr_options(verbose = FALSE) is reflected in logrittr_options()", {
+  reset_opts()
+  old <- logrittr_options(verbose = FALSE)
+  on.exit(do.call(logrittr_options, old))
+
+  expect_false(logrittr_options()$verbose)
+})
+
+test_that("logrittr_options() rejects non-logical verbose", {
+  expect_error(logrittr_options(verbose = "yes"), "`verbose` must be TRUE or FALSE")
+})
+
+# -- base R functions (non-data.frame rhs) --------------------------------
+
+test_that("%>=% works with bare symbol (nrow)", {
+  result <- small_df() %>=% nrow
+  expect_equal(result, 10L)
+})
+
+test_that("%>=% works with zero-arg call (nrow())", {
+  result <- small_df() %>=% nrow()
+  expect_equal(result, 10L)
+})
+
+test_that("%>=% works with ncol", {
+  result <- small_df() %>=% ncol
+  expect_equal(result, 3L)
+})
+
+test_that("%>=% works with names", {
+  result <- small_df() %>=% names
+  expect_equal(result, c("x", "y", "z"))
+})
+
+test_that("%>=% works with head (preserves data.frame result)", {
+  result <- small_df() %>=% head(3)
+  expect_equal(nrow(result), 3L)
+  expect_s3_class(result, "data.frame")
+})
+
+test_that("%>=% does not error with print", {
+  expect_no_error(small_df() %>=% print)
+})
+
 
 test_that("logrittr_activate() assigns %>= to global env", {
   logrittr_activate()
