@@ -1,16 +1,16 @@
 # logrittr 0.3.0
 
-* `logrittr_options(verbose = FALSE)`: désactive tout le logging de `%>=%`,
-  qui se comporte alors exactement comme `magrittr::%>%` — aucun message,
-  aucun overhead. Utile pour basculer entre mode débogage et mode production
-  sans modifier les pipelines.
-* Correction : `%>=%` ne plante plus avec les fonctions R base qui ne
-  retournent pas un `data.frame` (`nrow`, `ncol`, `names`, `print`, `View`,
-  `head`, …). La syntaxe `df %>=%  nrow` (symbole nu) est désormais supportée.
-* Correction : les deltas de lignes/colonnes (`+n` / `-n`) affichent un tiret
-  au lieu de provoquer une erreur quand le résultat n'est pas un `data.frame`.
+* `logrittr_options(verbose = FALSE)`: when set, `%>=%` behaves exactly like
+  a plain pipe — no logging, no timing, zero overhead. Flip one option at the
+  top of a script to switch between exploratory and production mode without
+  touching any pipe symbol.
+* Fix: `%>=%` no longer errors with base R functions that do not return a
+  `data.frame` (`nrow`, `ncol`, `names`, `print`, `View`, `head`, …). Bare
+  symbol syntax (`df %>=% nrow`) is now supported.
+* Fix: row/col deltas display a dash instead of throwing an error when the
+  result of a step is not a `data.frame`.
 
-
+# logrittr 0.2.0
 
 * Added `logrittr_activate()` / `logrittr_deactivate()`: replace `%>%` in the
   global environment with `%>=%` (and restore it) so existing pipelines are
@@ -18,7 +18,6 @@
 * Added `logrittr_hook()`: knitr source hook that rewrites `|>` or `%>%` to `%>=%`
   in chunks where `logrittr = TRUE` is set, enabling native-pipe logging in
   R Markdown and Quarto documents.
-
 
 # logrittr 0.1.0
 
