@@ -35,7 +35,7 @@ or, say, to read between the lines of a pipeline.
 
 
 
-## Multiples contexts
+## Multiple contexts
 
 Things happens:
 
@@ -111,6 +111,25 @@ iris %>=%
   added: n
 ```
 
+### With base R functions
+
+`%>=%` also works with base R functions that return something other than a
+data frame — `nrow`, `ncol`, `names`, `print`, `head`, `View`, etc. Row/col
+counts are shown as `-` for those steps since there is no data frame to
+measure.
+
+```r
+iris %>=%
+  subset(Sepal.Length < 5) %>=%
+  nrow
+#> [1] 22
+
+iris %>=%
+  head(3) %>=%
+  names
+#> [1] "Sepal.Length" "Sepal.Width"  "Petal.Length" "Petal.Width"  "Species"
+```
+
 ### With magrittr pipe `%>%`
 
 Replace `%>%` in the global environment with `%>=%` (and restore it) 
@@ -146,16 +165,19 @@ message   = TRUE   # needed to show logrittr output (uses message())
 
 # For |> pipes (opt-in per chunk with logrittr = TRUE):
 logrittr_hook()
+```
 
 Then in any chunk you want logged (native pipe):
-#' ```{r, logrittr = TRUE}
+
+````
+```{r, logrittr = TRUE}
 iris |>
   as_tibble() |>
   filter(Sepal.Length < 5) |>
   group_by(Species) |>
   summarise(n = n())
-#'```
 ```
+````
 
 ### Screenshot
 
@@ -174,7 +196,6 @@ nycflights13::flights %>=%
   count() %>=% 
   tidyr::pivot_wider(values_from = "n", names_from = "day") %>=% 
   glimpse()
-
 ```
 
 
@@ -188,6 +209,12 @@ logrittr_options(lang = "fr", big_mark = "\u00a0", wrap_width = 60)
 
 # English
 logrittr_options(lang = "en", big_mark = ",", wrap_width = 52)
+
+# Disable logging entirely (silent pipe, like plain %>%)
+logrittr_options(verbose = FALSE)
+
+# Re-enable
+logrittr_options(verbose = TRUE)
 ```
 
 | Option | Default | Description |
@@ -195,6 +222,30 @@ logrittr_options(lang = "en", big_mark = ",", wrap_width = 52)
 | `wrap_width` | `32` | Max chars before step label wraps |
 | `big_mark` | `" "` (thin space) | Thousands separator |
 | `lang` | `"en"` | Display language: `"fr"` or `"en"` |
+| `max_cols` | `5` | Max column names shown in added/dropped lines |
+| `verbose` | `TRUE` | Set to `FALSE` to silence all logging (acts as plain `%>%`) |
+
+### Switching between debug and production
+
+`verbose = FALSE` is useful when you want to keep `%>=%` in your pipeline code
+but silence the output for production runs, without changing a single pipe symbol.
+
+```r
+# dev / exploratory
+logrittr_options(verbose = TRUE)
+
+my_pipeline <- function(df) {
+  df %>=%
+    filter(!is.na(id)) %>=%
+    mutate(year = lubridate::year(date)) %>=%
+    group_by(year) %>=%
+    summarise(n = n())
+}
+
+# production — zero log overhead, same code
+logrittr_options(verbose = FALSE)
+my_pipeline(big_df)
+```
 
 ## Why not `tidylog`?
 
@@ -255,15 +306,12 @@ as join is already done, at this time we only show N row and N col evolution (be
 
 ## Roadmap
 
-This package at this time is a proof of concept and may not evolve much. It depends of feedbacks.
+- Integration with the magrittr pipe `%>%` via `logrittr_activate()` (0.2.0)
+- A knitr hook for iterative steps inside Rmarkdown or Quarto (0.2.0)
+- `verbose = FALSE` option to silence all logging without changing pipeline code (0.3.0)
+- Base R functions (`nrow`, `ncol`, `names`, `print`, `View`, …) now work without errors (0.3.0)
 
-Good news: 
+To-do:
 
-- Integration with the magrittr pipe `%>%` is now available via logrittr_activate (0.2.0)
-- a knitr hook can also helps in iterative steps inside Rmarkdown or Quarto
-
-Nevertheless, a to-do list:
-
-- Join's cardinalities (get informations from before / after pipe) but it has drawbacks (slow)
+- Join cardinalities (get information from before / after pipe) but it has drawbacks (slow)
 - `loglevel` option to mute sub-pipeline steps
-
