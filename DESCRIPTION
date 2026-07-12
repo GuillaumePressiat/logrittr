@@ -1,8 +1,8 @@
 Package: logrittr
-Title: A Verbose Pipe Operator for Logging dplyr Pipelines
+Title: A Verbose Pipe Operator for Logging Dplyr Pipelines
 Version: 0.3.0
-Authors@R: person("Pressiat", "Guillaume", email = "guillaume.pressiat@gmail.com", role = c("aut", "cre"))
-Maintainer: Guillaume Pressiat <guillaume.pressiat@gmail.com>
+Author: Guillaume Pressiat [aut, cre]
+Authors@R: person("Guillaume", "Pressiat", email = "guillaume.pressiat@gmail.com", role = c("aut", "cre"))
 Description: Provides the `%>=%` pipe operator that logs row counts, column
     counts, added/dropped columns, and timing at each step of a dplyr pipeline,
     inspired by the SAS DATA step log. Supports nested pipelines and configurable
@@ -26,3 +26,4 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+License: GPL-2

@@ -1,6 +1,14 @@
-^.*\.Rproj$
+# .Rbuildignore
 ^\.Rproj\.user$
+^\.git$
+^\.DS_Store$
+^logrittr\.Rcheck$
+^logrittr\.Rproj$
+^_pkgdown\.yml$
+^pkgdown$
+^docs$
+^cran-comments\.md$
+^.*\.Rproj$
 _pkgdown.yml
 pkgdown
 LICENSE
-^cran-comments\.md$

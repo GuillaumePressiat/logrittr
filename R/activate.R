@@ -23,6 +23,8 @@
 #'
 #' logrittr_deactivate()
 #' }
+#' @note This function modifies the global environment by temporarily
+#'   replacing \code{\%>\%}. Use \code{logrittr_deactivate()} to restore it.
 #'
 #' @seealso [logrittr_deactivate()], [logrittr_hook()]
 #' @export
